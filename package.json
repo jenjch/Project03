@@ -1,0 +1,38 @@
+{
+  "name": "project03",
+  "version": "1.0.0",
+  "description": "Allows users to convert foreign currency receipts into USD for a cumulative reimbursement amount.",
+  "main": "server.js",
+  "scripts": {
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd client && npm run start",
+    "seed": "node scripts/seedDB.js",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jem3523/Project03.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/jem3523/",
+
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.7"
+  },
+
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "if-env": "^1.0.4",
+    "mongoose": "^5.9.5",
+    "nodemailer": "^6.4.2",
+    "path": "^0.12.7",
+    "dotenv": "^8.2.0"
+  }
+}
