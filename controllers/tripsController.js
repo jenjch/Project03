@@ -2,22 +2,27 @@ const db = require("../models");
 
 module.exports = 
 {
-  findUserByEmail: function(req, res) {
-    db.Use
+  findTripsByEmail: function(req, res) {
+    db.Trips
       .findOne({ email: req.params.email})
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-  createUser: function(req, res) {
-    db.User
+  createTrips: function(req, res) {
+    db.Trips
       .create(req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-  updateUserByEmail: function(req, res) {
-    db.User
+  updateTripsByEmail: function(req, res) {
+    db.Trips
       .findOneAndUpdate({email: req.params.email }, req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
+
 };
+
+
+//NOTE: because we will be downloading the ENTIRE list of trips (to populate buttons), we will always be using update/put for modifying/deleting
+//anything in that area.  Thus there is no need for a delete function.
