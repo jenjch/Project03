@@ -1,0 +1,60 @@
+[
+    {
+        "email":"jason@email.com",
+        "tripname": "Vacation in London",
+        "receipts":
+        {
+        "receiptid_1": 
+        {
+            "receiptname":"Hilton",
+            "receiptdate":"2020-01-01", 
+            "currency":"GBP",
+            "foreignamount":"200", 
+            "USDamount":""
+        },
+        
+        "receiptid_2": 
+        {
+            "receiptname":"The Swan Pub", 
+            "receiptdate":"2020-01-02", 
+            "currency":"GBP", 
+            "foreignamount":"100", 
+            "USDamount":""
+        }
+        }
+    },
+
+    {
+        "email":"jason@email.com",
+        "tripname": "Work Appointment in Paris",
+        "receipts":
+        {
+        "receiptid_3": 
+        {
+            "receiptname":"Hilton", 
+            "receiptdate":"2020-01-03", 
+            "currency":"EUR", 
+            "foreignamount":"200", 
+            "USDamount":""
+        },
+
+        "receiptid_4": 
+        {
+            "receiptname":"Fredrick's Taxi", 
+            "receiptdate":"2020-01-04", 
+            "currency":"EUR", 
+            "foreignamount":"10", 
+            "USDamount":""
+        },
+
+        "receiptid_5": 
+        {
+            "receiptname":"United Airways", 
+            "receiptdate":"2020-01-10", 
+            "currency":"EUR",
+            "foreignamount":"125", 
+            "USDamount":""
+        }
+        }
+    }
+]
