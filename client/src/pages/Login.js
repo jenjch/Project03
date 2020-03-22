@@ -1,13 +1,20 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import LoginComponent from "../components/Login";
+import SignupComponent from "../components/Signup";
 
 function Login() {
-    return (
-      <div>
-          <h3>under construction</h3>
-      </div>
-    );
-}
+  const [view, toggleView] = useState(true);
 
+  
+
+  return (
+    <div>
+      {view ? <LoginComponent/> : <SignupComponent/>}
+      <button onClick={() => toggleView(!view)}>
+        {view ? " Or Sign Up Here" : "Or Log In Here"}
+      </button>
+    </div>
+  );
+}
 
 export default Login;
