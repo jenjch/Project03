@@ -1,38 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import API from "../utils/API";
 import { Link } from "react-router-dom";
 import DeleteBtn from "../components/DeleteBtn";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
-import TripsTestData from "../testData.json";                     //THIS IS FOR DEV TESTING UNTIL DB IS SET
+import globalContext from "../utils/store.js"
 
-
+//import trips from "../testData.json";                     //THIS IS FOR DEV TESTING UNTIL DB IS SET
 //JASON, add code to grab email from store (where Jenny will store it)
 
 
 function Trip() {
   
+  const myEmail = useContext(globalContext).email
+  //console.log (myEmail)
+
 
   // Setting our component's initial state
-  const [trips, setTrips] = useState([])
-  const [formObject, setFormObject] = useState({})
+  const [trips, setTrips] = useState([]);
+  const [formObject, setFormObject] = useState({});
+
 
   // Load trips
   useEffect(() => 
   {
-    setTrips({TripsTestData})
-    //loadTrips()
+    //setTrips({trips})                                     //for testing
+    loadTrips()
   }, [])
 
-  // Loads trips
+  console.log (trips)
+  console.log (trips.length)
+  console.log ("end of test")
+
+
+  // // Loads trips
   function loadTrips() 
   {
-    API.getTrip()
-      .then(res => 
-        setTrips(res.data)
-      )
-      .catch(err => console.log(err));
+    API.getTrip(myEmail)
+    .then (res => setTrips(res.data))
+    .catch(err => console.log(err))
   };
+
 
   // Updates trips
   function updateTrips(email, data) {
@@ -42,17 +50,11 @@ function Trip() {
   }
 
 
-  // Handles updating component state when the user types into the input field
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setFormObject({...formObject, [name]: value})
-  };
-
   // Save new  trip data, then reload the page from the DB
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook(
+    if (formObject.tripname) {
+      API.saveTrip(
       {
         tripname: formObject.tripname
       })
@@ -65,7 +67,6 @@ function Trip() {
       <div>
         <form>
           <Input
-            onChange={handleInputChange}
             name="tripname"
             placeholder="Trip Name"
           />
