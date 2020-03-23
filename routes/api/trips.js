@@ -1,13 +1,22 @@
 const router = require("express").Router();
 const tripsController = require("../../controllers/tripsController");
 
-// Matches with "/api/user"
+// Matches with "/api/trip"
 router.route("/")
-  .post(tripsController.createTrips);
+  .post(tripsController.createTrip);
 
-// Matches with "/api/user/:id"
+// Matches with "/api/trip/:email"
 router.route("/:email")
   .get(tripsController.findTripsByEmail)
-  .put(tripsController.updateTripsByEmail)
+
+// Matches with "/api/trip/:id"
+router.route("/:id")
+  .delete(tripsController.deleteTripByID)
+  
+
+// Matches with "/api/trip/receipt/:id"
+router.route("/receipt/:id")
+.post(tripsController.createReceiptWithTripID)
+.delete(tripsController.deleteReceiptByID)               //JASON, is this update or delete on the array?  (You don't want to delete the entire array!)
 
 module.exports = router;

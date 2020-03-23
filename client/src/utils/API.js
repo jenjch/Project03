@@ -2,6 +2,10 @@ import axios from "axios";
 
 export default {
 
+  getConversionRatio: function(type, date) {
+    return axios.get("/api/currency/" + date + "/" + type );
+  },
+
   saveUser: function(userData) {
     return axios.post("/api/user", userData);
   },
@@ -16,14 +20,23 @@ export default {
 
 
   saveTrip: function(tripData) {
-    return axios.post("/api/trips", tripData);
+    return axios.post("/api/trip", tripData);
   },
 
-  getTrip: function(email) {
-    return axios.get("/api/trips/" + email);
+  getTrips: function(email) {
+    return axios.get("/api/trip/" + email);
   },
 
-  updateTrip: function(email,tripData) {
-    return axios.put("/api/trips/" + email, tripData);
+  deleteTrip: function(id) {
+    return axios.put("/api/trip/" + id);
+  },
+
+  addReceipt: function(tripData) {
+    return axios.put("/api/trip/receipt/", tripData);
+  },
+
+  deleteReceipt: function(id,tripData) {
+    return axios.delete("/api/trip/recipt/" + id, tripData);
   }
 };
+

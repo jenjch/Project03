@@ -4,25 +4,42 @@ module.exports =
 {
   findTripsByEmail: function(req, res) {
     db.Trips
-      .findOne({ email: req.params.email})
+      .find({ email: req.params.email})
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-  createTrips: function(req, res) {
+  createTrip: function(req, res) {
     db.Trips
       .create(req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-  updateTripsByEmail: function(req, res) {
+  deleteTripByID: function(req, res) {
     db.Trips
-      .findOneAndUpdate({email: req.params.email }, req.body)
+      .findByIdAndDelete(req.params.id)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
 
+  createReceiptWithTripID: function(req, res) {
+    db.Trips
+      .findByIdAndUpdate(req.params.id, {$push: {receipts: req.body} })       //this ID is the trip ID
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+
+  deleteReceiptByID: function(req, res) {                                     //JASON ... is this actually an update or delete (see comments below)
+    db.Trips
+      .findOneAndDelete(req.params.id)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
 };
 
 
-//NOTE: because we will be downloading the ENTIRE list of trips (to populate buttons), we will always be using update/put for modifying/deleting
-//anything in that area.  Thus there is no need for a delete function.
+//pull function for removing receipt from array?
+
+//https://mongoosejs.com/docs/subdocs.html#adding-subdocs-to-arrays
+//Each subdocument has an _id by default. 
+//Mongoose document arrays have a special id method for searching a document array to find a document with a given _id.
+//var doc = parent.children.id(_id);
