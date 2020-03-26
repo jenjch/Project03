@@ -8,7 +8,8 @@ import globalContext from "./utils/store.js"
 
 function App() {
 
-  const globals = {email:"joe@email.com"}
+  // default undefined
+  const globals = {email: null}
   //NOTE: JENNY ... for login submit, talk to Russell!
 
   return (
