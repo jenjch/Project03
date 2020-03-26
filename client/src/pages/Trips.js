@@ -4,16 +4,12 @@ import { Link } from "react-router-dom";
 import DeleteBtn from "../components/DeleteBtn";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
-import globalContext from "../utils/store.js"
-
-//import trips from "../testData.json";                     //THIS IS FOR DEV TESTING UNTIL DB IS SET
-//JASON, add code to grab email from store (where Jenny will store it)
 
 
 function Trip() {
   
-  const myEmail = useContext(globalContext).email
-  //console.log (myEmail)
+  //const myEmail = useContext(globalContext).email
+  const myEmail = "j@email.com"                           //FOR TESTING
 
 
   // Setting our component's initial state
@@ -22,43 +18,53 @@ function Trip() {
 
 
   // Load trips
-  useEffect(() => 
-  {
-    //setTrips({trips})                                     //for testing
-    loadTrips()
-  }, [])
-
-  console.log (trips)
-  console.log (trips.length)
-  console.log ("end of test")
+  useEffect(() => {loadTrips()}, []);
 
 
-  // // Loads trips
+  console.log(myEmail);
+  console.log (trips);
+
+
+  // Loads trips
   function loadTrips() 
   {
-    API.getTrip(myEmail)
+    API.getTrips(myEmail)
     .then (res => setTrips(res.data))
     .catch(err => console.log(err))
   };
 
 
-  // Updates trips
-  function updateTrips(email, data) {
+  // delete trip
+  function deleteTrip(id) {
+    API.deleteTrip(id)
+      .then(res => loadTrips())
+      .catch(err => console.log(err));
+  };
+
+  // show trip
+  function showTrip(email, data) {
     API.updateTrip(email, data)
       .then(res => loadTrips())
       .catch(err => console.log(err));
   }
 
 
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setFormObject({...formObject, [name]: value})
+  };
+
+
   // Save new  trip data, then reload the page from the DB
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (formObject.tripname) {
-      API.saveTrip(
-      {
-        tripname: formObject.tripname
-      })
+    console.log(event)
+
+    if (formObject.tripname) 
+    {
+      API.saveTrip({ "email": myEmail, "tripname": formObject.tripname })
         .then(res => loadTrips())
+        .then (event.target.Input = null)
         .catch(err => console.log(err));
     }
   };
@@ -67,6 +73,7 @@ function Trip() {
       <div>
         <form>
           <Input
+            onChange={handleInputChange}
             name="tripname"
             placeholder="Trip Name"
           />
@@ -82,12 +89,12 @@ function Trip() {
           <List>
             {trips.map(trip => (
               <ListItem key={trip.email}>
-                <Link to={"/trips/" + trip._email}>
+                <Link to={"/trips/" + trip._id}>
                   <strong>
                     {trip.tripname}
                   </strong>
                 </Link>
-                <DeleteBtn onClick={() => updateTrips(trip.tripname)} />
+                <DeleteBtn onClick={() => deleteTrip(trip._id)} />
               </ListItem>
             ))}
           </List>
