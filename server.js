@@ -1,9 +1,11 @@
 const PORT = process.env.PORT || 3001;
 
 const express = require("express");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const routes = require("./routes");
 const app = express();
+const passport = require("./config/passport");
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
@@ -19,10 +21,15 @@ if (process.env.NODE_ENV === "production")
 // Add routes, both API and view
 app.use(routes);
 
+// sessions to track login status
+app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Connect to the Mongo DB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reactrecipes",
+// changed db name to reacttrips instead of reactrecipes - JC
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reacttrips",
   { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
 );
 
