@@ -16,18 +16,18 @@ function Signup(props) {
 
     return (
       <div>
-        <h3>Sign Up</h3>
-        <p>First Name</p>
+        <h3 className="white-text">Sign up</h3>
+        <p className="white-text">FIrst Name</p>
         <Input/>
-        <p>Last Name</p>
+        <p className="white-text">Last Name</p>
         <Input/>
-        <p>Email</p>
+        <p className="white-text">Email</p>
         <Input onChange={event => handleEmailChange(event)}/>
-        <p>Password</p>
-       <Input/> 
-
-       <button onClick={()=> handleClick()}>Sign Up!</button>
+        <p className="white-text">Password</p>
+        <Input/>
+        <button className="waves-effect waves-light btn blue darken-1" onClick={() => handleClick}>Sign up!</button>
       </div>
+
     );
   }
 
