@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import DeleteBtn from "../components/DeleteBtn";
-import { List, ListItem } from "../components/List";
+import FindReceiptBtn from "../components/FindReceiptBtn";
 import { Input, FormBtn } from "../components/Form";
-import globalContext from "../utils/store.js"
-
-//import trips from "../testData.json";                     //THIS IS FOR DEV TESTING UNTIL DB IS SET
-//JASON, add code to grab email from store (where Jenny will store it)
 
 
 function Trip() {
   
-  const myEmail = useContext(globalContext).email
-  //console.log (myEmail)
+  //const myEmail = useContext(globalContext).email
+  const myEmail = "j@email.com"                           //FOR TESTING
+
+  const inputRef = useRef();
 
 
   // Setting our component's initial state
@@ -21,45 +18,55 @@ function Trip() {
   const [formObject, setFormObject] = useState({});
 
 
-  // Load trips
-  useEffect(() => 
-  {
-    //setTrips({trips})                                     //for testing
-    loadTrips()
-  }, [])
+  // Load trips and run again any time the setTrips array changes
+  useEffect(() => {loadTrips()}, []);
+ 
 
-  console.log (trips)
-  console.log (trips.length)
-  console.log ("end of test")
-
-
-  // // Loads trips
+  // Loads trips
   function loadTrips() 
   {
-    API.getTrip(myEmail)
+    API.getTrips(myEmail)
     .then (res => setTrips(res.data))
     .catch(err => console.log(err))
   };
 
 
-  // Updates trips
-  function updateTrips(email, data) {
-    API.updateTrip(email, data)
+  // delete trip
+  function deleteTrip(id) {
+    API.deleteTrip(id)
       .then(res => loadTrips())
       .catch(err => console.log(err));
+  };
+
+
+  // show trip receipts
+  function showTripReceipts(id) 
+  {
+    for (let i=0; i<trips.length; i++)
+    {
+      if (trips[i]._id === id)
+      {console.log (trips[i].receipts)}
+    }
   }
+
+//updates setForm with each keystroke change
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setFormObject({...formObject, [name]: value})
+  };
 
 
   // Save new  trip data, then reload the page from the DB
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (formObject.tripname) {
-      API.saveTrip(
-      {
-        tripname: formObject.tripname
-      })
+    
+    if (formObject.tripname) 
+    {
+      API.saveTrip({ "email": myEmail, "tripname": formObject.tripname })
         .then(res => loadTrips())
         .catch(err => console.log(err));
+
+        //inputRef.current.value = "";
     }
   };
 
@@ -67,8 +74,10 @@ function Trip() {
       <div>
         <form>
           <Input
+            onChange={handleInputChange}
             name="tripname"
             placeholder="Trip Name"
+            //ref={inputRef}
           />
           <FormBtn
             disabled={!(formObject.tripname)}
@@ -79,18 +88,16 @@ function Trip() {
         </form>
 
         {trips.length ? (
-          <List>
+          <div>
             {trips.map(trip => (
-              <ListItem key={trip.email}>
-                <Link to={"/trips/" + trip._email}>
-                  <strong>
-                    {trip.tripname}
-                  </strong>
-                </Link>
-                <DeleteBtn onClick={() => updateTrips(trip.tripname)} />
-              </ListItem>
+              <div key={"tripDiv_" + trip._id} >
+                <p key={trip._id}><strong>{trip.tripname}</strong>
+                <DeleteBtn      onClick={() => deleteTrip(trip._id)} />
+                <FindReceiptBtn onClick={() => showTripReceipts(trip._id)} />
+                </p>
+              </div>
             ))}
-          </List>
+          </div>
         ) : (<h3>No Trips to Display</h3>)}
       </div>
     );

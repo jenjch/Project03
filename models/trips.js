@@ -13,7 +13,7 @@ const receiptSchema = new Schema(
 
 const tripSchema = new Schema(
   {
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
     tripname: { type: String, required: true },
     receipts: [receiptSchema]
   }
@@ -26,15 +26,11 @@ module.exports = Trips;
 // NOTE: the trips array should be a series of tripname:receiptobject value-pair, where the receiptobject is also a series of value pairs
 // In react, write a mongoose query like { "trip.tripname": "London" }
 //
-// 	trip:
-//  {
-//    email: "jason@email.com"  
-// 		tripname: "London",
-//    receipts:
-//      [
-// 		    receiptid: {receiptname:"", receiptdate:"", currency:"", foreignamount:"", USDamount:""},
-//        receiptid: {receiptname:"", receiptdate:"", currency:"", foreignamount:"", USDamount:""},
-//      ]
-// 		}
-// 	}
-// 
+    // {
+    //   "email":"j@email.com", 
+    //   "tripname":"London",
+    //   "receipts":
+    //     [
+    //       {receiptname:"hotel", receiptdate:"2020-10-10", currency:"EUR", foreignamount:"110", USDamount:"100"}
+    //     ]
+    //  }

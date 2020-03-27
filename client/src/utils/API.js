@@ -20,23 +20,27 @@ export default {
 
 
   saveTrip: function(tripData) {
-    return axios.post("/api/trip", tripData);
+    return axios.post("/api/trips", tripData);
   },
 
   getTrips: function(email) {
-    return axios.get("/api/trip/" + email);
+    return axios.get("/api/trips/" + email);
   },
 
   deleteTrip: function(id) {
-    return axios.put("/api/trip/" + id);
+    return axios.delete("/api/trips/" + id);
+  },
+
+  showReceipts: function(id) {
+    return axios.get("/api/trips/receipt/" + id);
   },
 
   addReceipt: function(tripData) {
-    return axios.put("/api/trip/receipt/", tripData);
+    return axios.put("/api/trips/receipt/", tripData);
   },
 
   deleteReceipt: function(id,tripData) {
-    return axios.delete("/api/trip/recipt/" + id, tripData);
+    return axios.delete("/api/trips/recipt/" + id, tripData);
   }
 };
 
