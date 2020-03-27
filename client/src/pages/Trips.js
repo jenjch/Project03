@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import DeleteBtn from "../components/DeleteBtn";
-import { List, ListItem } from "../components/List";
+import FindReceiptBtn from "../components/FindReceiptBtn";
 import { Input, FormBtn } from "../components/Form";
 
 
@@ -13,18 +12,15 @@ function Trip() {
 
   const inputRef = useRef();
 
+
   // Setting our component's initial state
   const [trips, setTrips] = useState([]);
   const [formObject, setFormObject] = useState({});
 
 
-  // Load trips
+  // Load trips and run again any time the setTrips array changes
   useEffect(() => {loadTrips()}, []);
-
-
-  //console.log(myEmail);
-  //console.log (trips);
-
+ 
 
   // Loads trips
   function loadTrips() 
@@ -42,14 +38,18 @@ function Trip() {
       .catch(err => console.log(err));
   };
 
-  // show trip
-  function showReceipts(id) {
-    API.showReceipts(id)
-      .then(res => loadTrips())
-      .catch(err => console.log(err));
+
+  // show trip receipts
+  function showTripReceipts(id) 
+  {
+    for (let i=0; i<trips.length; i++)
+    {
+      if (trips[i]._id === id)
+      {console.log (trips[i].receipts)}
+    }
   }
 
-
+//updates setForm with each keystroke change
   function handleInputChange(event) {
     const { name, value } = event.target;
     setFormObject({...formObject, [name]: value})
@@ -66,7 +66,7 @@ function Trip() {
         .then(res => loadTrips())
         .catch(err => console.log(err));
 
-        inputRef.current.value = "";
+        //inputRef.current.value = "";
     }
   };
 
@@ -77,7 +77,7 @@ function Trip() {
             onChange={handleInputChange}
             name="tripname"
             placeholder="Trip Name"
-            ref={inputRef}
+            //ref={inputRef}
           />
           <FormBtn
             disabled={!(formObject.tripname)}
@@ -88,18 +88,16 @@ function Trip() {
         </form>
 
         {trips.length ? (
-          <List>
+          <div>
             {trips.map(trip => (
-              <ListItem key={trip.email}>
-                <Link to={"/trips/" + trip._id}>
-                  <strong>
-                    {trip.tripname}
-                  </strong>
-                </Link>
-                <DeleteBtn onClick={() => deleteTrip(trip._id)} />
-              </ListItem>
+              <div key={"tripDiv_" + trip._id} >
+                <p key={trip._id}><strong>{trip.tripname}</strong>
+                <DeleteBtn      onClick={() => deleteTrip(trip._id)} />
+                <FindReceiptBtn onClick={() => showTripReceipts(trip._id)} />
+                </p>
+              </div>
             ))}
-          </List>
+          </div>
         ) : (<h3>No Trips to Display</h3>)}
       </div>
     );
