@@ -31,6 +31,6 @@ module.exports = Trips;
     //   "tripname":"London",
     //   "receipts":
     //     [
-    //       "receiptid": {receiptname:"hotel", receiptdate:"2020-10-10", currency:"EUR", foreignamount:"110", USDamount:"100"}
+    //       {receiptname:"hotel", receiptdate:"2020-10-10", currency:"EUR", foreignamount:"110", USDamount:"100"}
     //     ]
     //  }

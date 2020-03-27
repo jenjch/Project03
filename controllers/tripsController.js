@@ -3,17 +3,19 @@ const db = require("../models");
 module.exports = 
 {
   findTripsByEmail: function(req, res) {
-    db.Trips
+    db.Trips                                                    
       .find({ email: req.params.email})
-      .then(dbModel => res.json(dbModel))
+      .then(dbModel => res.json(dbModel))                              
       .catch(err => res.status(422).json(err));
   },
+
   createTrip: function(req, res) {
     db.Trips
-      .create(req.body)
+      .create(req.body)                                           
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
+
   deleteTripByID: function(req, res) {
     db.Trips
       .findByIdAndDelete(req.params.id)
@@ -28,18 +30,22 @@ module.exports =
       .catch(err => res.status(422).json(err));
   },
 
-  deleteReceiptByID: function(req, res) {                                     //JASON ... is this actually an update or delete (see comments below)
+
+  findReceiptsByTripID: function(req, res) {
+    db.Trips                                                    
+      .findById({_id:req.params.id})
+      .then(dbModel => res.json(dbModel))                   
+      .catch(err => res.status(422).json(err));
+  },
+
+
+  deleteReceiptByID: function(req, res) { 
     db.Trips
-      .findOneAndDelete(req.params.id)
+      .findByIdAndUpdate(req.params.id,                               //this is the search for the parent trip ID
+        { $pull: { receipts: req.body } },                            //then within the parent, this pulls the subdoc
+        { new: true }                                                 //this ensures the existing document is overwritten.
+      )
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
 };
-
-
-//pull function for removing receipt from array?
-
-//https://mongoosejs.com/docs/subdocs.html#adding-subdocs-to-arrays
-//Each subdocument has an _id by default. 
-//Mongoose document arrays have a special id method for searching a document array to find a document with a given _id.
-//var doc = parent.children.id(_id);
