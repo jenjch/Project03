@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import API from "../utils/API";
 import { Link } from "react-router-dom";
 import DeleteBtn from "../components/DeleteBtn";
@@ -11,6 +11,7 @@ function Trip() {
   //const myEmail = useContext(globalContext).email
   const myEmail = "j@email.com"                           //FOR TESTING
 
+  const inputRef = useRef();
 
   // Setting our component's initial state
   const [trips, setTrips] = useState([]);
@@ -21,8 +22,8 @@ function Trip() {
   useEffect(() => {loadTrips()}, []);
 
 
-  console.log(myEmail);
-  console.log (trips);
+  //console.log(myEmail);
+  //console.log (trips);
 
 
   // Loads trips
@@ -42,8 +43,8 @@ function Trip() {
   };
 
   // show trip
-  function showTrip(email, data) {
-    API.updateTrip(email, data)
+  function showReceipts(id) {
+    API.showReceipts(id)
       .then(res => loadTrips())
       .catch(err => console.log(err));
   }
@@ -58,14 +59,14 @@ function Trip() {
   // Save new  trip data, then reload the page from the DB
   function handleFormSubmit(event) {
     event.preventDefault();
-    console.log(event)
-
+    
     if (formObject.tripname) 
     {
       API.saveTrip({ "email": myEmail, "tripname": formObject.tripname })
         .then(res => loadTrips())
-        .then (event.target.Input = null)
         .catch(err => console.log(err));
+
+        inputRef.current.value = "";
     }
   };
 
@@ -76,6 +77,7 @@ function Trip() {
             onChange={handleInputChange}
             name="tripname"
             placeholder="Trip Name"
+            ref={inputRef}
           />
           <FormBtn
             disabled={!(formObject.tripname)}
