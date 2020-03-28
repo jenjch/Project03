@@ -14,8 +14,23 @@ function Signup(props) {
   let [password, setPassword] = useState("");
   let history = useHistory();
 
+  const handleFirstChange = event => {
+    setFirst(event.target.value);
+    // console.log(event.target.value)
+  };
+
+  const handleLastChange = event => {
+    setLast(event.target.value);
+    // console.log(event.target.value)
+  };
+
   const handleEmailChange = event => {
     setEmail(event.target.value);
+    // console.log(event.target.value)
+  };
+
+  const handlePasswordChange = event => {
+    setPassword(event.target.value);
     // console.log(event.target.value)
   };
 
@@ -25,10 +40,10 @@ function Signup(props) {
       method: "post",
       url: "/api/user",
       data: {
-        firstname: "Ben3",
-        lastname: "LastBen3",
-        email: "ben3@email.com",
-        password: "123456"
+        firstname: first,
+        lastname: last,
+        email: email,
+        password: password
       }
     })
       .then(data => {
@@ -41,6 +56,7 @@ function Signup(props) {
         console.log("signup", data);
         // this.setState({ email: data })
       })
+      
       .catch(console.log);
   };
 
