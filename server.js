@@ -7,6 +7,10 @@ const routes = require("./routes");
 const app = express();
 const passport = require("./config/passport");
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

@@ -8,7 +8,8 @@ router.route("/")
 
 // log in route (create function in controller) - JC
 router.route("/login")
-  .post(passport.authenticate("local"), userController.login);
+.post(passport.authenticate("local"), userController.login);
+  // .post((req, res) => passport.authenticate("local") (req, res), userController.login);
 
   // used for testing 
 // router.route("/posttest")
