@@ -1,5 +1,5 @@
 // Requiring bcrypt for password hashing. Using the bcryptjs version as the regular bcrypt module sometimes causes errors on Windows machines
-const Bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -14,12 +14,12 @@ const userSchema = new Schema({
 
   // Creating a custom method for our User model. This will check if an unhashed password entered by the user can be compared to the hashed password stored in our database
 
-  // userSchema.prototype.validPassword = function(password) {
+  // User.prototype.validPassword = function(password) {
   //   return bcrypt.compareSync(password, this.password);
   // };
 
   userSchema.methods.comparePassword = function(plaintext, callback) {
-    return callback(null, Bcrypt.compareSync(plaintext, this.password));
+    return callback(null, bcrypt.compareSync(plaintext, this.password));
 };
 
   // Hooks are automatic methods that run during various phases of the User Model lifecycle
@@ -30,7 +30,7 @@ const userSchema = new Schema({
 
   userSchema.pre("save", function(next) {
     // user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-    this.password = Bcrypt.hashSync(this.password, 10);
+    this.password = bcrypt.hashSync(this.password, 10);
     next();
   });
 

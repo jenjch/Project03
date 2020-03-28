@@ -35,6 +35,7 @@ passport.use(new LocalStrategy(
   // Sequelize needs to serialize and deserialize the user
   // Just consider this part boilerplate needed to make it all work
   passport.serializeUser(function(user, cb) {
+    console.log("serialized user");
     cb(null, user);
   });
   

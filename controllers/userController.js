@@ -1,4 +1,5 @@
 const db = require("../models");
+const passport = require("../config/passport.js")
 
 module.exports = 
 {
@@ -18,7 +19,12 @@ module.exports =
         console.log ("user created!")
         // redirect needs to be handled on the frontend in React
         // res.redirect(307, "/trips");
+        // moved this passport to the login function
+        // passport.authenticate("local");
+
+        // need to find way to send created user data to log in
         res.send("User Created!");
+        // login();
       })
       .catch(err => {
         console.log("error", err);
@@ -29,9 +35,37 @@ module.exports =
 
   // double check on sending log in data (need to fix) - JC
   login: function (req, res) {
+
+    passport.authenticate("local"),
+    // req.user is undefined
     res.json(req.user);
-    console.log("req.user", req.user);
+    console.log("req.body", req.user);
+    // res.send("User Created!");
   },
+
+  // need to test (connect to logout link click event on header) - JC 
+  logout: function (req, res) {
+      // Route for logging user out
+    req.logout();
+    res.send("Logged Out!");
+    console.log("req.body", req.body)
+  },
+
+    // need to figure out if this is necessary - using global context
+    // Route for getting some data about our user to be used client side
+    // app.get("/api/user_data", function(req, res) {
+    //   if (!req.user) {
+    //     // The user is not logged in, send back an empty object
+    //     res.json({});
+    //   } else {
+    //     // Otherwise send back the user's email and id
+    //     // Sending back a password, even a hashed password, isn't a good idea
+    //     res.json({
+    //       email: req.user.email,
+    //       id: req.user.id
+    //     });
+    //   }
+    // });
 
   updateUserByEmail: function(req, res) {
     db.User
