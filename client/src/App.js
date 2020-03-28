@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
 import globalContext from "./utils/store.js"
+import Footer from "./components/Footer"
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           </Switch>
         </div>
       </globalContext.Provider>
+      <Footer/>
     </Router>
   );
 }

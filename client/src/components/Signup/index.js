@@ -62,17 +62,17 @@ function Signup(props) {
 
   return (
     <div>
-      <h3>Sign Up</h3>
-      <p>First Name</p>
-      <Input onChange={event => handleFirstChange(event)} />
-      <p>Last Name</p>
-      <Input onChange={event => handleLastChange(event)}/>
-      <p>Email</p>
+      <h3 className="white-text">Sign Up</h3>
+      <p className="white-text" >First Name</p>
+      <Input />
+      <p className="white-text" >Last Name</p>
+      <Input />
+      <p className="white-text" >Email</p>
       <Input onChange={event => handleEmailChange(event)} />
-      <p>Password</p>
-      <Input onChange={event => handlePasswordChange(event)}/>
+      <p className="white-text" >Password</p>
+      <Input />
 
-      <button onClick={() => handleClick()}>Sign Up!</button>
+      <button className="waves-effect waves-light btn blue darken-1" onClick={() => handleClick()}>Sign Up!</button>
     </div>
   );
 }

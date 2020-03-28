@@ -8,11 +8,13 @@ function Login() {
   
 
   return (
-    <div>
-      {view ? <LoginComponent/> : <SignupComponent/>}
-      <button onClick={() => toggleView(!view)}>
-        {view ? " Or Sign Up Here" : "Or Log In Here"}
-      </button>
+    <div className="container">
+      <div>
+        {view ? <LoginComponent/> : <SignupComponent/>}
+        <button className="waves-effect waves-light btn blue darken-1" onClick={() => toggleView(!view)}>
+          {view ? " Or Sign Up Here" : "Or Log In Here"}
+        </button>
+      </div>
     </div>
   );
 }

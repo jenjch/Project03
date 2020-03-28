@@ -60,13 +60,12 @@ function Login(props) {
 
     return (
       <div>
-        <h3>Log In</h3>
-        <p>Email</p>
+        <h3 className="white-text" type="text">Log In</h3>
+        <p className="white-text" type="text">Email</p>
         <Input onChange={event => handleEmail(event)}/>
-        <p>Password</p>
-       <Input onChange={event => handlePassword(event)}/> 
-
-       <button onClick={()=> handleClick()}>Log In!</button>
+        <p className="white-text">Password</p>
+       <Input id="password" type="password" onChange={event => handlePassword(event)}/> 
+       <button className="waves-effect waves-light btn blue darken-1" onClick={()=> handleClick()}>Log In!</button>
       </div>
     );
   }
