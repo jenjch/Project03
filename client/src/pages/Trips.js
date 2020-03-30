@@ -3,10 +3,15 @@ import API from "../utils/API";
 import DeleteBtn from "../components/DeleteBtn";
 import FindReceiptBtn from "../components/FindReceiptBtn";
 import { Input, FormBtn } from "../components/Form";
+import globalContext from "../utils/store.js";
 
 
 function Trip() {
-  
+  // testing for useContext
+  const {email} = useContext(globalContext)
+  console.log("email from globalContext", email);
+
+
   //const myEmail = useContext(globalContext).email
   const myEmail = "j@email.com"                           //FOR TESTING
 

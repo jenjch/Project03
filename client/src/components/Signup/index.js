@@ -49,8 +49,8 @@ function Signup(props) {
       .then(data => {
         // data.data is part of the json (message sent from backend)
         if (data.data === "User Created!"){
-          // redirect works but page not rendered correctly yet
-          history.push("/trips");
+          // redirected to home page (which is log in page)
+          history.push("/");
         }
       
         console.log("signup", data);
