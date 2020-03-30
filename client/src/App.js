@@ -6,6 +6,7 @@ import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
 import globalContext from "./utils/store.js";
 import axios from "axios";
+import Footer from "./components/Footer"
 
 function App() {
   const globals = { email: null };
@@ -47,6 +48,7 @@ function App() {
           </Switch>
         </div>
       </globalContext.Provider>
+      <Footer/>
     </Router>
   );
 }

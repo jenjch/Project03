@@ -1,3 +1,12 @@
 nav.navbar.navbar-default {
   margin-bottom: 0;
 }
+
+.container{
+  background: rgba(54, 58, 70, 0.76);
+}
+
+body{
+  background-image: url("https://images.pexels.com/photos/53621/calculator-calculation-insurance-finance-53621.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  
+}

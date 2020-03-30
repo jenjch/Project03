@@ -4,9 +4,12 @@ import "./style.css";
 function Header() 
 {
   return (
-  <div className="header">
+    <div className="container">
+        <div className="header">
     <h1>Header Title</h1>
-  </div>)
+  </div>
+    </div>
+  )
 }
 
 export default Header;
