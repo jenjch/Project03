@@ -1,11 +1,9 @@
 const db = require("../models");
-const passport = require("../config/passport.js")
+const passport = require("../config/passport.js");
 
-module.exports = 
-{
+module.exports = {
   findUserByEmail: function(req, res) {
-    db.User
-      .findOne({ email: req.params.email})
+    db.User.findOne({ email: req.params.email })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
@@ -13,10 +11,9 @@ module.exports =
   // user needs to be redirected (and logged in) after signup - JC
   createUser: function(req, res) {
     console.log("testing1", req.body);
-    db.User
-      .create(req.body)
+    db.User.create(req.body)
       .then(() => {
-        console.log ("user created!")
+        console.log("user created!");
         // redirect needs to be handled on the frontend in React
         // res.redirect(307, "/trips");
         // moved this passport to the login function
@@ -24,53 +21,63 @@ module.exports =
 
         // need to find way to send created user data to log in
         res.send("User Created!");
-        // login();
+        login();
       })
       .catch(err => {
         console.log("error", err);
-        res.status(422).json(err); 
+        res.status(422).json(err);
       });
   },
 
-
   // double check on sending log in data (need to fix) - JC
-  login: function (req, res) {
+  // login: function (req, res) {
 
-    passport.authenticate("local"),
-    // req.user is undefined
-    res.json(req.user);
-    console.log("req.body", req.user);
-    // res.send("User Created!");
+  //   // passport.authenticate("local"),
+  //   // req.user is undefined
+  //   res.json(req.user);
+  //   console.log("req.user", req.user);
+  //   // res.send("User Created!");
+  // },
+
+  login: function(req, res, next) {
+    console.log("routes/user.js, login, req.body: ");
+    console.log(req.body);
+    next();
   },
 
-  // need to test (connect to logout link click event on header) - JC 
-  logout: function (req, res) {
-      // Route for logging user out
+  // need to test (connect to logout link click event on header) - JC
+  logout: function(req, res) {
+    // Route for logging user out
     req.logout();
     res.send("Logged Out!");
-    console.log("req.body", req.body)
+    console.log("req.body", req.body);
+    // if (req.user) {
+    //   req.logout();
+    //   res.send({ msg: "logging out" });
+    // } else {
+    //   res.send({ msg: "no user to log out" });
+    // }
   },
 
-    // need to figure out if this is necessary - using global context
-    // Route for getting some data about our user to be used client side
-    // app.get("/api/user_data", function(req, res) {
-    //   if (!req.user) {
-    //     // The user is not logged in, send back an empty object
-    //     res.json({});
-    //   } else {
-    //     // Otherwise send back the user's email and id
-    //     // Sending back a password, even a hashed password, isn't a good idea
-    //     res.json({
-    //       email: req.user.email,
-    //       id: req.user.id
-    //     });
-    //   }
-    // });
+  // need to figure out if this is necessary - using global context
+  // Route for getting some data about our user to be used client side
+  // app.get("/api/user_data", function(req, res) {
+  //   if (!req.user) {
+  //     // The user is not logged in, send back an empty object
+  //     res.json({});
+  //   } else {
+  //     // Otherwise send back the user's email and id
+  //     // Sending back a password, even a hashed password, isn't a good idea
+  //     res.json({
+  //       email: req.user.email,
+  //       id: req.user.id
+  //     });
+  //   }
+  // });
 
   updateUserByEmail: function(req, res) {
-    db.User
-      .findOneAndUpdate({email: req.params.email }, req.body)
+    db.User.findOneAndUpdate({ email: req.params.email }, req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
-  },
+  }
 };
