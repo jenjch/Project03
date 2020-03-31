@@ -29,28 +29,19 @@ module.exports = {
       });
   },
 
-  // double check on sending log in data (need to fix) - JC
-  // login: function (req, res) {
-
-  //   // passport.authenticate("local"),
-  //   // req.user is undefined
-  //   res.json(req.user);
-  //   console.log("req.user", req.user);
-  //   // res.send("User Created!");
-  // },
-
   login: function(req, res, next) {
     console.log("routes/user.js, login, req.body: ");
     console.log(req.body);
     next();
   },
 
-  // need to test (connect to logout link click event on header) - JC
+  // connected to logout link click event on nav component) - JC
   logout: function(req, res) {
     // Route for logging user out
     req.logout();
+    // "Logged Out!" message doesn't seem to show on browser console (but logout works?)
     res.send("Logged Out!");
-    console.log("req.body", req.body);
+    console.log("log out req.body", req.body);
     // if (req.user) {
     //   req.logout();
     //   res.send({ msg: "logging out" });

@@ -18,7 +18,7 @@ router.route("/").get((req, res, next) => {
   }
 });
 
-// log in route (create function in controller) - JC
+// log in route (function in controller) - JC
 router
   .route("/login")
   .post(userController.login, passport.authenticate("local"), (req, res) => {
@@ -31,6 +31,15 @@ router
 // .post((req, res) => passport.authenticate("local") (req, res), userController.login);
 // using this without passport (placed in the userController.js file instead results in empty JSON in postman)
 // .post(userController.login);
+
+// log out route (function in controller) - JC
+// need to check why console.log is not showing - JC
+router
+  .route("/logout")
+  .get(userController.logout, (req, res) => {
+    console.log("logged out", req.user);
+    res.send("Logged out!");
+  });
 
 router.route("/testlogin").post(authenticated, (req, res) => {
   res.json(req.user);
