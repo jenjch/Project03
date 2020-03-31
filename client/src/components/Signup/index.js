@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "../Form";
 import axios from "axios";
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import globalContext from "../../utils/store.js"
 
  // default undefined from App.js
@@ -12,7 +12,7 @@ function Signup(props) {
   let [last, setLast] = useState("");
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
-  let history = useHistory();
+  // let history = useHistory();
 
   const handleFirstChange = event => {
     setFirst(event.target.value);
@@ -34,8 +34,12 @@ function Signup(props) {
     // console.log(event.target.value)
   };
 
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
   const handleClick = () => {
-    console.log(email);
+    console.log("entered email on signup", email);
     axios({
       method: "post",
       url: "/api/user",
@@ -49,28 +53,32 @@ function Signup(props) {
       .then(data => {
         // data.data is part of the json (message sent from backend)
         if (data.data === "User Created!"){
-          // redirected to home page (which is log in page)
-          history.push("/");
+          // redirected to home page (which is log in page) to log in
+          // use refresh instead of history.push redirect to the default "Log In" Component at the "/" route
+          // history.push("/");
+          refreshPage();
         }
       
         console.log("signup", data);
         // this.setState({ email: data })
       })
-      
-      .catch(console.log);
+      .catch(err => {
+        console.log("signup error", err);
+      });
+
   };
 
   return (
     <div>
       <h3 className="white-text">Sign Up</h3>
       <p className="white-text" >First Name</p>
-      <Input />
+      <Input onChange={event => handleFirstChange(event)}/>
       <p className="white-text" >Last Name</p>
-      <Input />
+      <Input onChange={event => handleLastChange(event)}/>
       <p className="white-text" >Email</p>
       <Input onChange={event => handleEmailChange(event)} />
       <p className="white-text" >Password</p>
-      <Input />
+      <Input type="password" onChange={event => handlePasswordChange(event)}/>
 
       <button className="waves-effect waves-light btn blue darken-1" onClick={() => handleClick()}>Sign Up!</button>
     </div>

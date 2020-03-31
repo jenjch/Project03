@@ -4,16 +4,25 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import globalContext from "../../utils/store.js";
 
-// default undefined from App.js
+
 
 function Login(props) {
+
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
+  
+  // email used for globals is "renamed" to globalEmail since email is used above (for input)
+  // use the emailHandler function from app.js
+  const { email: globalEmail, emailHandler } = useContext(globalContext);
+  console.log("check globalEmail", globalEmail);
   let history = useHistory();
 
-  // const {email: globalEmail, setEmail: setGlobalEmail } = useContext(
-  //   globalContext
-  // );
+  useEffect(() => {
+    // on intial page load, if there's an email in global (logged in), redirect to restricted "/trips" page
+    if (globalEmail) {
+      history.push("/trips")
+    }
+  });
 
   const handleEmail = event => {
     setEmail(event.target.value);
@@ -25,9 +34,8 @@ function Login(props) {
     // console.log(event.target.value)
   };
 
-  // need to fix log in and add redirect
+  // axios click event. If correct credentials, update global, and redirect to destricted "/trips" page
   const handleClick = () => {
-    
     console.log("email sent on log in click", email);
     console.log("password send on log in click", password);
     axios({
@@ -41,8 +49,8 @@ function Login(props) {
       .then(data => {
         console.log("log in data", data);
         if (data) {
-          // double check the data structure 
-          // setGlobalEmail(data.data.user.email);
+          // double check the data structure (no user)
+          emailHandler(data.data.email);
           history.push("/trips");
         }
       })
@@ -69,16 +77,29 @@ function Login(props) {
 
   // figure out how to push the email (after authenticated log in) to global context
 
-    return (
-      <div>
-        <h3 className="white-text" type="text">Log In</h3>
-        <p className="white-text" type="text">Email</p>
-        <Input onChange={event => handleEmail(event)}/>
-        <p className="white-text">Password</p>
-       <Input id="password" type="password" onChange={event => handlePassword(event)}/> 
-       <button className="waves-effect waves-light btn blue darken-1" onClick={()=> handleClick()}>Log In!</button>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h3 className="white-text" type="text">
+        Log In
+      </h3>
+      <p className="white-text" type="text">
+        Email
+      </p>
+      <Input onChange={event => handleEmail(event)} />
+      <p className="white-text">Password</p>
+      <Input
+        id="password"
+        type="password"
+        onChange={event => handlePassword(event)}
+      />
+      <button
+        className="waves-effect waves-light btn blue darken-1"
+        onClick={() => handleClick()}
+      >
+        Log In!
+      </button>
+    </div>
+  );
+}
 
 export default Login;
