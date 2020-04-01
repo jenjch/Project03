@@ -59,7 +59,7 @@ function Login(props) {
   
 
     return (
-      <div>
+      <div className="input-field col s12">
         <h3 className="white-text" type="text">Log In</h3>
         <p className="white-text" type="text">Email</p>
         <Input onChange={event => handleEmail(event)}/>

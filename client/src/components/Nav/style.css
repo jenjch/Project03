@@ -4,6 +4,9 @@ nav.navbar.navbar-default {
 
 .container{
   background: rgba(54, 58, 70, 0.76);
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 25px;
 }
 
 body{

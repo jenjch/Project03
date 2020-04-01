@@ -61,7 +61,7 @@ function Signup(props) {
   };
 
   return (
-    <div>
+    <div className="input-field col s12">
       <h3 className="white-text">Sign Up</h3>
       <p className="white-text" >First Name</p>
       <Input />
