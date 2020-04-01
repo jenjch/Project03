@@ -23,7 +23,11 @@ function Login(props) {
       history.push("/trips")
     }
   });
+  
+  // regex for email
+  const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
+  // need to give error if email or password is incorrect (check back end)
   const handleEmail = event => {
     setEmail(event.target.value);
     // console.log(event.target.value)
@@ -55,6 +59,7 @@ function Login(props) {
         }
       })
       .catch(err => {
+        // put useRef input clear (may want to choose which inputs to clear)
         console.log("log in error", err);
       });
 
@@ -78,6 +83,7 @@ function Login(props) {
   // figure out how to push the email (after authenticated log in) to global context
 
   return (
+    <form>
     <div>
       <h3 className="white-text" type="text">
         Log In
@@ -99,6 +105,7 @@ function Login(props) {
         Log In!
       </button>
     </div>
+    </form>
   );
 }
 

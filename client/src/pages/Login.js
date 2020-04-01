@@ -12,8 +12,8 @@ function Login() {
   return (
     <div className="container">
       <div>
-        {/* LoginComponent is default */}
-        {view ? <LoginComponent/> : <SignupComponent/>}
+        {/* LoginComponent is default, in signup component add toggleView for use on Signup component (to use default Login component after redirect to "/") */}
+        {view ? <LoginComponent/> : <SignupComponent toggleView = {toggleView}/>}
         {/* on click, toggle to SignupComponent */}
         <button className="waves-effect waves-light btn blue darken-1" onClick={() => toggleView(!view)}>
           {view ? " Or Sign Up Here" : "Or Log In Here"}

@@ -13,7 +13,7 @@ function Trip() {
   console.log("email from globalContext", email);
 
   //const myEmail = useContext(globalContext).email
-  const myEmail = "j@email.com"; //FOR TESTING
+  // const myEmail = "j@email.com"; //FOR TESTING
 
   const inputRef = useRef();
 
@@ -34,7 +34,7 @@ function Trip() {
 
   // Loads trips
   function loadTrips() {
-    API.getTrips(myEmail)
+    API.getTrips(email)
       .then(res => setTrips(res.data))
       .catch(err => console.log(err));
   }
@@ -66,7 +66,7 @@ function Trip() {
     event.preventDefault();
 
     if (formObject.tripname) {
-      API.saveTrip({ email: myEmail, tripname: formObject.tripname })
+      API.saveTrip({ email: email, tripname: formObject.tripname })
         .then(res => loadTrips())
         .catch(err => console.log(err));
 
