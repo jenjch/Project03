@@ -12,9 +12,6 @@ function Trip() {
   const { email } = useContext(globalContext);
   console.log("email from globalContext", email);
 
-  //const myEmail = useContext(globalContext).email
-  const myEmail = "j@email.com"; //FOR TESTING
-
   const inputRef = useRef();
 
   // Setting our component's initial state
@@ -34,7 +31,7 @@ function Trip() {
 
   // Loads trips
   function loadTrips() {
-    API.getTrips(myEmail)
+    API.getTrips(email)
       .then(res => setTrips(res.data))
       .catch(err => console.log(err));
   }
@@ -66,26 +63,25 @@ function Trip() {
     event.preventDefault();
 
     if (formObject.tripname) {
-      API.saveTrip({ email: myEmail, tripname: formObject.tripname })
+      API.saveTrip({ email: email, tripname: formObject.tripname })
         .then(res => loadTrips())
         .catch(err => console.log(err));
 
-      //inputRef.current.value = "";
+      inputRef.current.value = "";
     }
   }
 
   return (
     <div>
       <form>
-        <Input
-          onChange={handleInputChange}
-          name="tripname"
-          placeholder="Trip Name"
-          //ref={inputRef}
-        />
-        <FormBtn disabled={!formObject.tripname} onClick={handleFormSubmit}>
+
+        <div className="form-group">
+          <input ref={inputRef} className="form-control white-text" onChange={handleInputChange} name="tripname" placeholder="Trip Name" />
+        </div>
+
+        <button disabled={!formObject.tripname} onClick={handleFormSubmit} style={{ float: "left", marginBottom: 10 }} className="waves-effect waves-light btn blue darken-1">
           Add Trip
-        </FormBtn>
+        </button>
       </form>
 
       {trips.length ? (
