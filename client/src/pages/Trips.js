@@ -73,6 +73,7 @@ function Trip() {
 
   return (
     <div>
+
       <form>
 
         <div className="form-group">
