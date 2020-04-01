@@ -3,15 +3,14 @@ import API from "../utils/API";
 import DeleteBtn from "../components/DeleteBtn";
 import FindReceiptBtn from "../components/FindReceiptBtn";
 import { Input, FormBtn } from "../components/Form";
-import { ReceiptInput } from "../components/Receipt";
-import { TextInput, Default, Col, Row } from "react-materialize";
-// import { Col, Row, Container } from "../components/Grid";
-import Sidebar from "../components/Sidebar";
-import CardPanel from "react-materialize/lib/CardPanel";
+import globalContext from "../utils/store.js";
+import { useHistory } from "react-router-dom";
 
 function Trip() {
-  //const myEmail = useContext(globalContext).email
-  const myEmail = "j@email.com"; //FOR TESTING
+  // global email works, just update myEmail to "email" in the trips functions below when ready to use - JC
+  let history = useHistory();
+  const { email } = useContext(globalContext);
+  console.log("email from globalContext", email);
 
   const inputRef = useRef();
 
@@ -19,14 +18,20 @@ function Trip() {
   const [trips, setTrips] = useState([]);
   const [formObject, setFormObject] = useState({});
 
+  // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
   useEffect(() => {
-    loadTrips();
+    console.log("email from trips page", email)
+    if (!email) {
+      history.push("/");
+    } else {
+      loadTrips();
+    }
   }, []);
 
   // Loads trips
   function loadTrips() {
-    API.getTrips(myEmail)
+    API.getTrips(email)
       .then(res => setTrips(res.data))
       .catch(err => console.log(err));
   }
@@ -58,79 +63,45 @@ function Trip() {
     event.preventDefault();
 
     if (formObject.tripname) {
-      API.saveTrip({ email: myEmail, tripname: formObject.tripname })
+      API.saveTrip({ email: email, tripname: formObject.tripname })
         .then(res => loadTrips())
         .catch(err => console.log(err));
 
-      //inputRef.current.value = "";
+      inputRef.current.value = "";
     }
   }
 
   return (
     <div>
-      {/* <Row>
-        <Col m = {4}>
-      <Sidebar> */}
-        <form className="addTripform">
-          <Input
-            onChange={handleInputChange}
-            name="tripname"
-            placeholder="Trip Name"
-            //ref={inputRef}
-          />
-          <FormBtn disabled={!formObject.tripname} onClick={handleFormSubmit}>
-            Add Trip
-          </FormBtn>
-        </form>
 
-        {trips.length ? (
-          <div>
-            {trips.map(trip => (
-              <div key={"tripDiv_" + trip._id}>
-                <p key={trip._id}>
-                  <strong>{trip.tripname}</strong>
-                  <DeleteBtn onClick={() => deleteTrip(trip._id)} />
-                  <FindReceiptBtn onClick={() => showTripReceipts(trip._id)} />
-                </p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <h3>No Trips to Display</h3>
-        )}
-      {/* </Sidebar>
-      </Col> */}
-      {/* <Col m ={8}>
-        <CardPanel>Hi Jenny <textarea></textarea></CardPanel> */}
-      {/* <ReceiptInput>
-        <TextInput
-          onChange={handleInputChange}
-          name="Currency"
-          placeholder="Currency (required)"
-          value={formObject.currency}
-        />
-        <TextInput
-          onChange={handleInputChange}
-          name="ForeignAmount"
-          placeholder="Foreign Amount (required)"
-          value={formObject.foreignamount}
-        />
-        <FormBtn
-          disabled={
-            !(
-              formObject.date &&
-              formObject.currency &&
-              formObject.foreignamount
-            )
-          }
-          onClick={handleFormSubmit}
-        >
-          Submit
-        </FormBtn>
-      </ReceiptInput> */}
-      {/* </Col>
-      </Row> */}
+      <form>
+
+        <div className="form-group">
+          <input ref={inputRef} className="form-control white-text" onChange={handleInputChange} name="tripname" placeholder="Trip Name" />
+        </div>
+
+        <button disabled={!formObject.tripname} onClick={handleFormSubmit} style={{ float: "left", marginBottom: 10 }} className="waves-effect waves-light btn blue darken-1">
+          Add Trip
+        </button>
+      </form>
+
+      {trips.length ? (
+        <div>
+          {trips.map(trip => (
+            <div key={"tripDiv_" + trip._id}>
+              <p key={trip._id}>
+                <strong>{trip.tripname}</strong>
+                <DeleteBtn onClick={() => deleteTrip(trip._id)} />
+                <FindReceiptBtn onClick={() => showTripReceipts(trip._id)} />
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <h3>No Trips to Display</h3>
+      )}
     </div>
   );
 }
+
 export default Trip;
