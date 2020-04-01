@@ -6,7 +6,7 @@ const authenticated = require("../../models/middleware/isAuthenticated.js");
 // Matches with "/api/user"
 router.route("/").post(userController.createUser);
 
-// test get route
+// test get route "/api/user"
 router.route("/").get((req, res, next) => {
   console.log("===== user!!======");
   console.log(req.user);

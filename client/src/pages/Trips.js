@@ -12,6 +12,7 @@ function Trip() {
   const { email } = useContext(globalContext);
   console.log("email from globalContext", email);
 
+
   const inputRef = useRef();
 
   // Setting our component's initial state

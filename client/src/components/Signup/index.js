@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "../Form";
 import axios from "axios";
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import globalContext from "../../utils/store.js"
 
  // default undefined from App.js
@@ -12,7 +12,13 @@ function Signup(props) {
   let [last, setLast] = useState("");
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
-  // let history = useHistory();
+  let history = useHistory();
+
+  // regex for email 
+  // also need to make sure email doesn't already exist in database
+  const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+
+  
 
   const handleFirstChange = event => {
     setFirst(event.target.value);
@@ -30,13 +36,14 @@ function Signup(props) {
   };
 
   const handlePasswordChange = event => {
-    setPassword(event.target.value);
+    // testing - adding trim to not count towards the password length limit validation in the return form render
+    setPassword(event.target.value.trim());
     // console.log(event.target.value)
   };
 
-  function refreshPage() {
-    window.location.reload(false);
-  }
+//  function refreshPage() {
+//     window.location.reload(false);
+//   } 
 
   const handleClick = () => {
     console.log("entered email on signup", email);
@@ -54,9 +61,10 @@ function Signup(props) {
         // data.data is part of the json (message sent from backend)
         if (data.data === "User Created!"){
           // redirected to home page (which is log in page) to log in
-          // use refresh instead of history.push redirect to the default "Log In" Component at the "/" route
-          // history.push("/");
-          refreshPage();
+        
+          history.push("/");
+          // use toggle from login page to ensure default "Log In" Component at the "/" route after redirect (rather than refresh)
+          props.toggleView (true);
         }
       
         console.log("signup", data);
@@ -69,6 +77,7 @@ function Signup(props) {
   };
 
   return (
+    <form>
     <div>
       <h3 className="white-text">Sign Up</h3>
       <p className="white-text" >First Name</p>
@@ -79,9 +88,13 @@ function Signup(props) {
       <Input onChange={event => handleEmailChange(event)} />
       <p className="white-text" >Password</p>
       <Input type="password" onChange={event => handlePasswordChange(event)}/>
+      {/* testing adding validation text to password input */}
+      {(password.length < 8) &&
+      <p className="red-text">password must be at least 8 characters</p>}
 
       <button className="waves-effect waves-light btn blue darken-1" onClick={() => handleClick()}>Sign Up!</button>
     </div>
+    </form>
   );
 }
 export default Signup;
