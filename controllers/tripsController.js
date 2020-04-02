@@ -10,10 +10,11 @@ module.exports =
   },
 
   createTrip: function(req, res) {
+    console.log("req.body", req.body);
     db.Trips
       .create(req.body)                                           
       .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+      .catch(err => console.log(err));
   },
 
   deleteTripByID: function(req, res) {
