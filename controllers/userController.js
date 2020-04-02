@@ -21,7 +21,7 @@ module.exports = {
 
         // need to find way to send created user data to log in
         res.send("User Created!");
-        login();
+        // login();
       })
       .catch(err => {
         console.log("error", err);

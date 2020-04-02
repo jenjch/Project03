@@ -25,7 +25,7 @@ function Login(props) {
   });
   
   // regex for email
-  const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+  // const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
   // need to give error if email or password is incorrect (check back end)
   const handleEmail = event => {
@@ -83,7 +83,6 @@ function Login(props) {
   // figure out how to push the email (after authenticated log in) to global context
 
   return (
-    <form>
     <div>
       <h3 className="white-text" type="text">
         Log In
@@ -105,7 +104,6 @@ function Login(props) {
         Log In!
       </button>
     </div>
-    </form>
   );
 }
 
