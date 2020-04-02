@@ -78,7 +78,7 @@ function Signup(props) {
 
   return (
     <form>
-    <div>
+    <div className="input-field">
       <h3 className="white-text">Sign Up</h3>
       <p className="white-text" >First Name</p>
       <Input onChange={event => handleFirstChange(event)}/>

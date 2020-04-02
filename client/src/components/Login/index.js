@@ -83,7 +83,7 @@ function Login(props) {
   // figure out how to push the email (after authenticated log in) to global context
 
   return (
-    <div>
+    <div className="input-field">
       <h3 className="white-text" type="text">
         Log In
       </h3>
