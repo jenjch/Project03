@@ -11,7 +11,7 @@ function Login() {
 
   return (
     <div className="container">
-      <div>
+      <div className="box">
         {/* LoginComponent is default, in signup component add toggleView for use on Signup component (to use default Login component after redirect to "/") */}
         {view ? <LoginComponent/> : <SignupComponent toggleView = {toggleView}/>}
         {/* on click, toggle to SignupComponent */}
