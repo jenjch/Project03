@@ -77,22 +77,30 @@ function Signup(props) {
   };
 
   return (
-    <form>
-    <div className="input-field">
+  
+    <form className="signup">
+    <div>
       <h3 className="white-text">Sign Up</h3>
-      <p className="white-text" >First Name</p>
-      <Input onChange={event => handleFirstChange(event)}/>
-      <p className="white-text" >Last Name</p>
-      <Input onChange={event => handleLastChange(event)}/>
-      <p className="white-text" >Email</p>
-      <Input onChange={event => handleEmailChange(event)} />
-      <p className="white-text" >Password</p>
-      <Input type="password" onChange={event => handlePasswordChange(event)}/>
-      {/* testing adding validation text to password input */}
-      {(password.length < 8) &&
-      <p className="red-text">password must be at least 8 characters</p>}
-
-      <button className="waves-effect waves-light btn blue darken-1" onClick={() => handleClick()}>Sign Up!</button>
+      <div className="row">
+        <div className="input-field col s6">
+            <p className="white-text" >First Name</p>
+            <Input onChange={event => handleFirstChange(event)}/>
+        </div>
+        <div className="input-field col s6">
+         <p className="white-text" >Last Name</p>
+          <Input onChange={event => handleLastChange(event)}/>
+        </div>
+      </div>
+      <div className="row">
+        <p className="white-text" >Email</p>
+        <Input onChange={event => handleEmailChange(event)} />
+        <p className="white-text" >Password</p>
+        <Input type="password" onChange={event => handlePasswordChange(event)}/>
+        {/* testing adding validation text to password input */}
+        {(password.length < 8) &&
+        <p className="red-text">password must be at least 8 characters</p>}
+        <button className="waves-effect waves-light btn blue darken-1" onClick={() => handleClick()}>Sign Up!</button>
+      </div>
     </div>
     </form>
   );
