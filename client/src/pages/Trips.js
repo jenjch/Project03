@@ -5,13 +5,25 @@ import FindReceiptBtn from "../components/FindReceiptBtn";
 import { Input, FormBtn } from "../components/Form";
 import globalContext from "../utils/store.js";
 import { useHistory } from "react-router-dom";
+import { ReceiptInput } from "../components/Receipt";
+import "react-materialize";
+import {
+  TextInput,
+  Default,
+  Col,
+  Row,
+  Card,
+  DatePicker,
+} from "react-materialize";
+import Sidebar from "../components/Sidebar";
+import { ShowReceipt } from "../components/ShowReceipt";
+import { Receipt } from "../components/Receipt";
 
 function Trip() {
   // global email works, just update myEmail to "email" in the trips functions below when ready to use - JC
   let history = useHistory();
   const { email } = useContext(globalContext);
   console.log("email from globalContext", email);
-
 
   const inputRef = useRef();
 
@@ -22,7 +34,7 @@ function Trip() {
   // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
   useEffect(() => {
-    console.log("email from trips page", email)
+    console.log("email from trips page", email);
     if (!email) {
       history.push("/");
     } else {
@@ -33,15 +45,15 @@ function Trip() {
   // Loads trips
   function loadTrips() {
     API.getTrips(email)
-      .then(res => setTrips(res.data))
-      .catch(err => console.log(err));
+      .then((res) => setTrips(res.data))
+      .catch((err) => console.log(err));
   }
 
   // delete trip
   function deleteTrip(id) {
     API.deleteTrip(id)
-      .then(res => loadTrips())
-      .catch(err => console.log(err));
+      .then((res) => loadTrips())
+      .catch((err) => console.log(err));
   }
 
   // show trip receipts
@@ -65,8 +77,8 @@ function Trip() {
 
     if (formObject.tripname) {
       API.saveTrip({ email: email, tripname: formObject.tripname })
-        .then(res => loadTrips())
-        .catch(err => console.log(err));
+        .then((res) => loadTrips())
+        .catch((err) => console.log(err));
 
       inputRef.current.value = "";
     }
@@ -74,33 +86,180 @@ function Trip() {
 
   return (
     <div>
+      <Row>
+        <Col className="full-width" m={2}>
+          <Sidebar>
+            <form>
+              <div className="form-group">
+                <input
+                  ref={inputRef}
+                  className="form-control white-text"
+                  onChange={handleInputChange}
+                  name="tripname"
+                  placeholder="Trip Name"
+                />
+              </div>
 
-      <form>
+              <button
+                disabled={!formObject.tripname}
+                onClick={handleFormSubmit}
+                style={{ float: "left", marginBottom: 10 }}
+                className="waves-effect waves-light btn blue darken-1"
+              >
+                Add Trip
+              </button>
+            </form>
 
-        <div className="form-group">
-          <input ref={inputRef} className="form-control white-text" onChange={handleInputChange} name="tripname" placeholder="Trip Name" />
-        </div>
-
-        <button disabled={!formObject.tripname} onClick={handleFormSubmit} style={{ float: "left", marginBottom: 10 }} className="waves-effect waves-light btn blue darken-1">
-          Add Trip
-        </button>
-      </form>
-
-      {trips.length ? (
-        <div>
-          {trips.map(trip => (
-            <div key={"tripDiv_" + trip._id}>
-              <p key={trip._id}>
-                <strong>{trip.tripname}</strong>
-                <DeleteBtn onClick={() => deleteTrip(trip._id)} />
-                <FindReceiptBtn onClick={() => showTripReceipts(trip._id)} />
-              </p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <h3>No Trips to Display</h3>
-      )}
+            {trips.length ? (
+              <div>
+                {trips.map((trip) => (
+                  <div key={"tripDiv_" + trip._id}>
+                    <p key={trip._id}>
+                      <strong>{trip.tripname}</strong>
+                      <DeleteBtn onClick={() => deleteTrip(trip._id)} />
+                      <FindReceiptBtn
+                        onClick={() => showTripReceipts(trip._id)}
+                      />
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <h3>No Trips to Display</h3>
+            )}
+          </Sidebar>
+        </Col>
+        <Col className="full-width" m={8}>
+          <Receipt>
+            <Row>
+              <TextInput
+                s={12}
+                // onChange={handleInputChange}
+                name="Receipt Name"
+                placeholder="Receipt Name (required)"
+                // value={formObject.title}
+              />
+            </Row>
+            <Row>
+              <DatePicker
+                s={12}
+                id="DatePicker-5"
+                options={{
+                  autoClose: false,
+                  container: null,
+                  defaultDate: null,
+                  disableDayFn: null,
+                  disableWeekends: false,
+                  events: [],
+                  firstDay: 0,
+                  format: "yyyy-mm-dd",
+                  i18n: {
+                    cancel: "Cancel",
+                    clear: "Clear",
+                    done: "Ok",
+                    months: [
+                      "January",
+                      "February",
+                      "March",
+                      "April",
+                      "May",
+                      "June",
+                      "July",
+                      "August",
+                      "September",
+                      "October",
+                      "November",
+                      "December",
+                    ],
+                    monthsShort: [
+                      "Jan",
+                      "Feb",
+                      "Mar",
+                      "Apr",
+                      "May",
+                      "Jun",
+                      "Jul",
+                      "Aug",
+                      "Sep",
+                      "Oct",
+                      "Nov",
+                      "Dec",
+                    ],
+                    nextMonth: "›",
+                    previousMonth: "‹",
+                    weekdays: [
+                      "Sunday",
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                    ],
+                    weekdaysAbbrev: ["S", "M", "T", "W", "T", "F", "S"],
+                    weekdaysShort: [
+                      "Sun",
+                      "Mon",
+                      "Tue",
+                      "Wed",
+                      "Thu",
+                      "Fri",
+                      "Sat",
+                    ],
+                  },
+                  isRTL: false,
+                  maxDate: null,
+                  minDate: null,
+                  onClose: null,
+                  onDraw: null,
+                  onOpen: null,
+                  onSelect: null,
+                  parse: null,
+                  setDefaultDate: false,
+                  showClearBtn: false,
+                  showDaysInNextAndPreviousMonths: false,
+                  showMonthAfterYear: false,
+                  yearRange: 10,
+                }}
+              />
+            </Row>
+            <Row>
+              <TextInput
+                s={12}
+                onChange={handleInputChange}
+                name="Currency"
+                placeholder="Currency (required)"
+                value={formObject.currency}
+              />
+            </Row>
+            <Row>
+              <TextInput
+                s={12}
+                onChange={handleInputChange}
+                name="ForeignAmount"
+                placeholder="Foreign Amount (required)"
+                value={formObject.foreignamount}
+              />
+            </Row>
+            <Row>
+              <button
+                disabled={
+                  !formObject.date &&
+                  formObject.currency &&
+                  formObject.foreignamount
+                }
+                onClick={handleFormSubmit}
+              >
+                Convert
+              </button>
+              <h3>No Receipts to Display</h3>
+            </Row>
+          </Receipt>
+        </Col>
+        <Col className="full-width" m={2}>
+          <ShowReceipt></ShowReceipt>
+        </Col>
+      </Row>
     </div>
   );
 }
