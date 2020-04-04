@@ -4,13 +4,10 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import globalContext from "../../utils/store.js";
 
-
-
 function Login(props) {
-
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
-  
+
   // email used for globals is "renamed" to globalEmail since email is used above (for input)
   // use the emailHandler function from app.js
   const { email: globalEmail, emailHandler } = useContext(globalContext);
@@ -20,10 +17,10 @@ function Login(props) {
   useEffect(() => {
     // on intial page load, if there's an email in global (logged in), redirect to restricted "/trips" page
     if (globalEmail) {
-      history.push("/trips")
+      history.push("/trips");
     }
   });
-  
+
   // regex for email
   // const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
@@ -82,8 +79,81 @@ function Login(props) {
 
   // figure out how to push the email (after authenticated log in) to global context
 
+  // Setting the component's initial state
+  //  const [stateForm, setStateForm] = useState({})
+
+  //  function handleInputChange (event)
+  //  {
+  //    // Getting the value and name of the input which triggered the change
+  //    const { name, value } = event.target;
+  //    // Updating the input's state
+  //    setStateForm({...stateForm, [name]: value });
+  //  };
+
+  function sendEmail(event) {
+    // event.preventDefault();
+
+    //collect the values from input
+    // var enteredName =  stateForm.enteredName;
+    // var enteredEmail =  stateForm.enteredEmail;
+    // var enteredMessage = stateForm.enteredMessage;
+
+    //make sure name and email are not empty
+    //     if (!enteredName || !enteredEmail || !enteredMessage)
+    //     {
+    //       console.log("Name, email, and message are all required.")
+    //     }
+    //     else
+    //     {
+    //       axios(
+    //       {
+    //         method: "POST",
+    //         //url:"http://localhost:3001/send",
+    //         url: process.env.PORT,
+    //         data:
+    //         {
+    //           name: enteredName,
+    //           email: enteredEmail,
+    //           message:  enteredMessage
+    //         }
+    //       });
+
+    //       setStateForm(
+    //       {
+    //         enteredName : "",
+    //         enteredEmail : "",
+    //         enteredMessage : ""
+    //       });
+
+    //       document.getElementById('input_name').value = "";
+    //       document.getElementById('input_email').value = "";
+    //       document.getElementById('input_message').value = "";
+
+    //     };
+
+    axios({
+      method: "POST",
+      url:"http://localhost:3001/send",
+      // url: process.env.PORT,
+      data: {
+        name: "Angel",
+        email: "bootcamp_project@yahoo.com",
+        tripName: "Italy",
+        receiptsBody: "Italy testing message body of email"
+      }
+    }).then((response)=>{
+      if (response.data.msg === 'success'){
+          alert("Email sent, awesome!"); 
+          this.resetForm()
+      }else if(response.data.msg === 'fail'){
+          alert("Oops, something went wrong. Try again")
+      }
+    });
+
+  }
+
   return (
-    <div>
+    <div className="input-field">
       <h3 className="white-text" type="text">
         Log In
       </h3>
@@ -102,6 +172,13 @@ function Login(props) {
         onClick={() => handleClick()}
       >
         Log In!
+      </button>
+      
+      <button
+        className="waves-effect waves-light btn blue darken-1"
+        onClick={() => sendEmail()}
+      >
+        Send Email Test!
       </button>
     </div>
   );
