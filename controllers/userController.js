@@ -2,41 +2,63 @@ const db = require("../models");
 const passport = require("../config/passport.js");
 
 module.exports = {
-  findUserByEmail: function(req, res) {
+  findUserByEmail: function (req, res) {
     db.User.findOne({ email: req.params.email })
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+      .then((dbModel) => res.json(dbModel))
+      .catch((err) => res.status(422).json(err));
   },
 
   // user needs to be redirected (and logged in) after signup - JC
-  createUser: function(req, res) {
+  createUser: function (req, res) {
     console.log("testing1", req.body);
-    db.User.create(req.body)
-      .then(() => {
-        console.log("user created!");
-        // redirect needs to be handled on the frontend in React
-        // res.redirect(307, "/trips");
-        // moved this passport to the login function
-        // passport.authenticate("local");
+    db.User.findOne({ email: req.body.email })
+      .then((data) => {
+        console.log("check user data", data);
+        if (data) {
+          res.send("user already exists!");
+        } else {
+          db.User.create(req.body)
+            .then(() => {
+              console.log("user created!");
+              // redirect needs to be handled on the frontend in React
+              // res.redirect(307, "/trips");
+              // moved this passport to the login function
+              // passport.authenticate("local");
 
-        // need to find way to send created user data to log in
-        res.send("User Created!");
-        // login();
+              // need to find way to send created user data to log in
+              res.send("User Created!");
+              // login();
+            })
+            .catch((err) => {
+              console.log("error", err);
+              res.status(422).json(err);
+            });
+        }
       })
-      .catch(err => {
-        console.log("error", err);
-        res.status(422).json(err);
+      .catch((err) => {
+        console.log("catch email error", err);
       });
   },
 
-  login: function(req, res, next) {
+  login: function (req, res, next) {
     console.log("routes/user.js, login, req.body: ");
     console.log(req.body);
-    next();
+    db.User.findOne({ email: req.body.email })
+      .then((data) => {
+        console.log("check log in data", data);
+        if (!data) {
+          res.send ("user email does not exist!")
+        } else {
+          next();
+        }
+      })
+      .catch((err) => {
+        console.log("catch log in email error", err);
+      });
   },
 
   // connected to logout link click event on nav component) - JC
-  logout: function(req, res) {
+  logout: function (req, res) {
     // Route for logging user out
     req.logout();
     // "Logged Out!" message doesn't seem to show on browser console (but logout works?)
@@ -66,9 +88,9 @@ module.exports = {
   //   }
   // });
 
-  updateUserByEmail: function(req, res) {
+  updateUserByEmail: function (req, res) {
     db.User.findOneAndUpdate({ email: req.params.email }, req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  }
+      .then((dbModel) => res.json(dbModel))
+      .catch((err) => res.status(422).json(err));
+  },
 };
