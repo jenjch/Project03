@@ -5,7 +5,6 @@ import FindReceiptBtn from "../components/FindReceiptBtn";
 import { Input, FormBtn } from "../components/Form";
 import globalContext from "../utils/store.js";
 import { useHistory } from "react-router-dom";
-import { ReceiptInput } from "../components/Receipt";
 import "react-materialize";
 import {
   TextInput,
@@ -30,6 +29,17 @@ function Trip() {
   // Setting our component's initial state
   const [trips, setTrips] = useState([]);
   const [formObject, setFormObject] = useState({});
+
+  const [foreignReceipt, setForeignReceipt] = useState({
+    Name: "",
+    Type: "",
+    Date: "",
+    Amount: 0,
+    ConvertedAmount: "",
+  });
+
+  const [activeTrip, setActiveTrip] = useState([]);
+
 
   // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
@@ -61,6 +71,7 @@ function Trip() {
     for (let i = 0; i < trips.length; i++) {
       if (trips[i]._id === id) {
         console.log(trips[i].receipts);
+        setActiveTrip(trips[i])
       }
     }
   }
@@ -82,6 +93,32 @@ function Trip() {
 
       inputRef.current.value = "";
     }
+  }
+
+  function handleReceiptChange(event) {
+    const { name, value } = event.target;
+    setForeignReceipt({ ...foreignReceipt, [name]: value });
+  }
+
+  function handleReceiptConvert(event) {
+    event.preventDefault();
+    if (true) {
+      API.getConversionRatio(foreignReceipt.Type, foreignReceipt.Date)
+        .then((res) => {
+          console.log(res.data * Number(foreignReceipt.Amount));
+          // setConvertedAmount(res.data * Number(foreignReceipt.Amount))
+          let ConvertedAmount = (res.data * Number(foreignReceipt.Amount)).toFixed(2)
+          setForeignReceipt({...foreignReceipt, ConvertedAmount })
+        })
+        .catch((err) => console.log(err));
+
+      // inputRef.current.value = "";
+    }
+  }
+
+  function handleReceiptSubmit(event) {
+    event.preventDefault();
+    console.log(foreignReceipt, "Got to the Submit function")
   }
 
   return (
@@ -134,125 +171,62 @@ function Trip() {
             <Row>
               <TextInput
                 s={12}
-                // onChange={handleInputChange}
-                name="Receipt Name"
+                // onChange={handleReceiptChange}
+                name="Name"
                 placeholder="Receipt Name (required)"
                 // value={formObject.title}
               />
             </Row>
             <Row>
-              <DatePicker
+              <TextInput
                 s={12}
-                id="DatePicker-5"
-                options={{
-                  autoClose: false,
-                  container: null,
-                  defaultDate: null,
-                  disableDayFn: null,
-                  disableWeekends: false,
-                  events: [],
-                  firstDay: 0,
-                  format: "yyyy-mm-dd",
-                  i18n: {
-                    cancel: "Cancel",
-                    clear: "Clear",
-                    done: "Ok",
-                    months: [
-                      "January",
-                      "February",
-                      "March",
-                      "April",
-                      "May",
-                      "June",
-                      "July",
-                      "August",
-                      "September",
-                      "October",
-                      "November",
-                      "December",
-                    ],
-                    monthsShort: [
-                      "Jan",
-                      "Feb",
-                      "Mar",
-                      "Apr",
-                      "May",
-                      "Jun",
-                      "Jul",
-                      "Aug",
-                      "Sep",
-                      "Oct",
-                      "Nov",
-                      "Dec",
-                    ],
-                    nextMonth: "›",
-                    previousMonth: "‹",
-                    weekdays: [
-                      "Sunday",
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday",
-                      "Saturday",
-                    ],
-                    weekdaysAbbrev: ["S", "M", "T", "W", "T", "F", "S"],
-                    weekdaysShort: [
-                      "Sun",
-                      "Mon",
-                      "Tue",
-                      "Wed",
-                      "Thu",
-                      "Fri",
-                      "Sat",
-                    ],
-                  },
-                  isRTL: false,
-                  maxDate: null,
-                  minDate: null,
-                  onClose: null,
-                  onDraw: null,
-                  onOpen: null,
-                  onSelect: null,
-                  parse: null,
-                  setDefaultDate: false,
-                  showClearBtn: false,
-                  showDaysInNextAndPreviousMonths: false,
-                  showMonthAfterYear: false,
-                  yearRange: 10,
-                }}
+                onChange={handleReceiptChange}
+                name="Date"
+                placeholder="Date YYYY-MM-DD"
+                value={foreignReceipt.Date}
               />
             </Row>
             <Row>
               <TextInput
                 s={12}
-                onChange={handleInputChange}
-                name="Currency"
+                onChange={handleReceiptChange}
+                name="Type"
                 placeholder="Currency (required)"
-                value={formObject.currency}
+                value={foreignReceipt.Type}
               />
             </Row>
             <Row>
               <TextInput
                 s={12}
-                onChange={handleInputChange}
-                name="ForeignAmount"
+                onChange={handleReceiptChange}
+                name="Amount"
                 placeholder="Foreign Amount (required)"
-                value={formObject.foreignamount}
+                value={foreignReceipt.Amount}
               />
             </Row>
             <Row>
+              <TextInput
+                disabled={true}
+                s={12}
+                name="Converted"
+                placeholder="Hit Convert to View Converted Amount"
+                value={foreignReceipt.ConvertedAmount ? `Converted Amount : $${foreignReceipt.ConvertedAmount}` : foreignReceipt.ConvertedAmount}
+              />
+            </Row>
+            <Row>
+              
+            {/* {foreignReceipt.convertedAmount ? <p> {foreignReceipt.convertedAmount}</p> : null} */}
               <button
                 disabled={
-                  !formObject.date &&
-                  formObject.currency &&
-                  formObject.foreignamount
+                  !foreignReceipt.Date &&
+                  foreignReceipt.Type &&
+                  foreignReceipt.Amount
                 }
-                onClick={handleFormSubmit}
+                onClick={foreignReceipt.ConvertedAmount ? handleReceiptSubmit : handleReceiptConvert}
               >
-                Convert
+                {foreignReceipt.ConvertedAmount ? "Submit Receipt" : "Convert"}
               </button>
-              <h3>No Receipts to Display</h3>
+               
             </Row>
           </Receipt>
         </Col>
