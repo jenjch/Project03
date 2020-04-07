@@ -38,7 +38,8 @@ function Login(props) {
   // axios click event. If correct credentials, update global, and redirect to destricted "/trips" page
   const handleClick = () => {
     console.log("email sent on log in click", email);
-    console.log("password send on log in click", password);
+    // need to comment this pw part out eventually
+    console.log("password sent on log in click", password);
     axios({
       method: "post",
       url: "/api/user/login",
@@ -51,13 +52,11 @@ function Login(props) {
         console.log("log in data", data);
         if (data.data === "user email does not exist!") {
           // alert("user doesn't exist");
-          // shows error message for user does not exist
+          // shows error message for user does not exist (display block versus display none)
           setCheckuser("block");
           setEmail("");
           setPassword("");
           setCredentials("none");
-          // need to figure out how to make hidden again right afterwards (and clear inputs)without page reload
-
         } else if (data) {
           // double check the data structure (no user)
           emailHandler(data.data.email);
@@ -65,45 +64,13 @@ function Login(props) {
         }
       })
       .catch((err) => {
-        // put useRef input clear (may want to choose which inputs to clear)
         console.log("log in error", err);
         // alert("incorrect credentials")
         // shows error message for incorrect credentials (password)
         setCredentials("block");
         setPassword("");
-        setCheckuser("none");
-        // need to figure out how to change error message state to hidden again right afterwards (and clear inputs) without page reload
       });
-
-    // Need to direct to "/trips"
-    // .then(data => {
-    //   // data.data is part of the json (message sent from backend)
-    //   if (data.data === "User Created!"){
-    //     // redirect works but page not rendered correctly yet
-    //     history.push("/trips");
-    //   }
-
-    //   console.log("signup", data);
-    //   // this.setState({ email: data })
-    // })
-
-    // .catch(console.log);
   };
-
-  // write function to check if authenticated (goes in app.js?)
-
-  // figure out how to push the email (after authenticated log in) to global context
-
-  // Setting the component's initial state
-  //  const [stateForm, setStateForm] = useState({})
-
-  //  function handleInputChange (event)
-  //  {
-  //    // Getting the value and name of the input which triggered the change
-  //    const { name, value } = event.target;
-  //    // Updating the input's state
-  //    setStateForm({...stateForm, [name]: value });
-  //  };
 
   function sendEmail() {
     // event.preventDefault();
@@ -149,13 +116,14 @@ function Login(props) {
     axios({
       method: "POST",
       // url: "http://localhost:3001/send",
-      // need to see if this needs to be changed for deployed heroku version
+      // url: process.env.PORT, 
+      // need to see if this needs to be changed for deployed heroku version (process.env.PORT does NOT work on local written in the .env file as process.env.PORT="http://localhost:3001/send", process.env.PORT=http://localhost:3001/send, or PORT=3001 with below code. All return in the console.log as undefined)
       url: `http://localhost:${process.env.PORT || 3001}/send`,
       data: {
         name: "Angel",
         email: "bootcamp_project@yahoo.com",
-        tripName: "Cambodia",
-        receiptsBody: "Cambodia testing message body of email",
+        tripName: "Turkey",
+        receiptsBody: "Turkey testing message body of email",
       },
       // }).then((response)=>{
       //   if (response.data.msg === 'success'){

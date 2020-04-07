@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  // useEffect
-} from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "../Form";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -12,32 +9,74 @@ import { TextInput } from "react-materialize";
 //  const globals = {email: null}
 
 function Signup(props) {
-  let [first, setFirst] = useState("");
-  let [last, setLast] = useState("");
+  let [first, setFirst] = useState(null);
+  let [last, setLast] = useState(null);
   let [email, setEmail] = useState("");
-  let [password, setPassword] = useState("");
+  let [password, setPassword] = useState(null);
   let history = useHistory();
   let [validation, setValidation] = useState({
     first: false,
     last: false,
-    email: false,
+    // meed to add email 
+    // email: false,
     password: false,
   });
 
+  let [checkFirst, setCheckFirst] = useState("none");
+  let [checkLast, setCheckLast] = useState("none");
+  let [checkPassword, setCheckPassword] = useState("none");
   let [checkemail, setCheckemail] = useState("none");
+  let [checkForm, setCheckForm] = useState("none");
 
+  useEffect(() => {
+    if (first === null || first.length > 0) {
+      setCheckFirst("none");
+    } else {
+      setCheckFirst("block");
+      setValidation({ ...validation, first: false });
+    }
+    if (last === null || last.length > 0) {
+      setCheckLast("none");
+    } else {
+      setCheckLast("block");
+      setValidation({ ...validation, last: false });
+    }
+    if (password === null || password.length >= 7) {
+      setCheckPassword("none");
+      // setValidation({ ...validation, password: true });
+    } else {
+      setCheckPassword("block");
+      setValidation({ ...validation, password: false });
+    }
+  }, [first, last, password]);
+  
   // regex for email
-  // also need to make sure email doesn't already exist in database
   // const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
   const handleFirstChange = (event) => {
     setFirst(event.target.value);
+    if (first !== null && first.length > 0) {
+      setValidation({ ...validation, first: true });
+    }
     // console.log(event.target.value)
+    // if (first.length > 0) {
+    //   setCheckFirst("none");
+    // } else {
+    //   setCheckFirst("block");
+    // }
   };
 
   const handleLastChange = (event) => {
     setLast(event.target.value);
+    if (last !== null && last.length > 0) {
+      setValidation({ ...validation, last: true });
+    }
     // console.log(event.target.value)
+    // if (last.length < 1) {
+    //   setCheckLast("block");
+    // } else {
+    //   setCheckLast("none");
+    // }
   };
 
   const handleEmailChange = (event) => {
@@ -47,9 +86,12 @@ function Signup(props) {
 
   const handlePasswordChange = (event) => {
     // testing - adding trim to not count towards the password length limit validation in the return form render
-    setPassword(event.target.value.trim());
+    setPassword(event.target.value);
+    if (password !== null && password.length >= 7) {
+      setValidation({ ...validation, password: true });
+    }
     // console.log(event.target.value)
-    setValidation({ password: password.length > 7 });
+    // setValidation({ password: password.length > 7 });
   };
 
   //  function refreshPage() {
@@ -58,7 +100,24 @@ function Signup(props) {
 
   const handleClick = (event) => {
     event.preventDefault();
+    console.log(validation);
+    var validForm = Object.values(validation).every((el) => el === true);
+    console.log("validForm", validForm);
 
+    if (!validForm) {
+      console.log("form invalid");
+      setFirst(null);
+      setLast(null);
+      setPassword(null);
+      setCheckForm("block");
+      setCheckFirst("none");
+      setCheckLast("none")
+      setCheckPassword("none");
+      setValidation({ ...validation, first: false, last:false, password:false });
+
+      return 
+    }
+    console.log(first, last, email, password, "test input")
     console.log("entered email on signup", email);
     axios({
       method: "post",
@@ -100,11 +159,18 @@ function Signup(props) {
         <div className="row">
           <div className="input-field col s6">
             <p className="white-text">First Name</p>
-            <Input onChange={(event) => handleFirstChange(event)} />
+            <Input onChange={(event) => handleFirstChange(event)} value={first===null ? "" : first} />
+        
+            <p className="red-text" style={{ display: checkFirst }}>
+              field cannot be blank
+            </p>
           </div>
           <div className="input-field col s6">
             <p className="white-text">Last Name</p>
-            <Input onChange={(event) => handleLastChange(event)} />
+            <Input onChange={(event) => handleLastChange(event)} value={last===null ? "" : last}/>
+            <p className="red-text" style={{ display: checkLast }}>
+              field cannot be blank
+            </p>
           </div>
         </div>
         <p className="white-text">Email</p>
@@ -123,15 +189,21 @@ function Signup(props) {
           // className = {(password.length > 0 && !validation.password) ? "validate invalid":"validate valid"}
           id="loginPassword"
           onChange={(event) => handlePasswordChange(event)}
-          error="password must be at least 8 characters"
+          value={password===null ? "" : password}
+          // error="password must be at least 8 characters"
         />
         {/* testing adding validation text to password input */}
         {/* {password.length < 8 && (
           <p className="red-text">password must be at least 8 characters</p>
         )} */}
-
+        <p className="red-text" style={{ display: checkPassword }}>
+          password must be at least 8 characters
+        </p>
         <p className="red-text" style={{ display: checkemail }}>
           email already used
+        </p>
+        <p className="red-text" style={{ display: checkForm}}>
+          form invalid
         </p>
         <button
           className="waves-effect waves-light btn blue darken-1"

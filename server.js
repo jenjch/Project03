@@ -102,8 +102,8 @@ let transporter = nodemailer.createTransport(
     
   const mailOptions = 
   {
-      from: 'bootcamp_project@yahoo.com',
-      to: 'bootcamp_project@yahoo.com',
+      from: "bootcamp_project@yahoo.com",
+      to: req.body.email,
       subject: "Your " + tripName + " Receipts",
       text: name + " (" + email + "): ",
       html: "<p>" + receiptsBody + "</p>"

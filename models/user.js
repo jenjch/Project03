@@ -8,15 +8,15 @@ const userSchema = new Schema({
   lastname: { type: String, required: true, trim: true },
   email: {
     type: String,
-    // adding backend format validation for email - need to test
     // validate: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    // required: true,
-    // unique: true,
+    required: true,
+    unique: true,
+    trim: true
   },
   password: { 
     type: String, 
     required: true,
-    // adding backend character requirement validation for password - need to test
+    trim: true
     // min: 8, 
     // max: 50 
   },
