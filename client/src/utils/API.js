@@ -36,7 +36,7 @@ export default {
   },
 
   addReceipt: function(id, receiptData) {
-    return axios.put("/api/trips/receipt/" +id, receiptData);
+    return axios.put("/api/trips/receipt/" + id, receiptData);
   },
 
   deleteReceipt: function(id, receiptData) {

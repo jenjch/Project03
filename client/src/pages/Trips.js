@@ -31,15 +31,16 @@ function Trip() {
   const [formObject, setFormObject] = useState({});
 
   const [foreignReceipt, setForeignReceipt] = useState({
-    Name: "",
-    Type: "",
-    Date: "",
-    Amount: 0,
-    ConvertedAmount: "",
+    receiptname: "",
+    receiptdate: "",
+    currency: "",
+    foreignamount: "",
+    USDamount: "",
   });
 
-  const [activeTrip, setActiveTrip] = useState([]);
-
+  const [activeTrip, setActiveTrip] = useState({
+    receipts: [],
+  });
 
   // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
@@ -68,12 +69,12 @@ function Trip() {
 
   // show trip receipts
   function showTripReceipts(id) {
-    for (let i = 0; i < trips.length; i++) {
-      if (trips[i]._id === id) {
-        console.log(trips[i].receipts);
-        setActiveTrip(trips[i])
-      }
-    }
+    API.getTrips(email)
+      .then((res) => {
+        setTrips(res.data);
+        setActiveTrip(res.data.filter(({ _id }) => _id === id)[0]);
+      })
+      .catch((err) => console.log(err));
   }
 
   //updates setForm with each keystroke change
@@ -97,18 +98,27 @@ function Trip() {
 
   function handleReceiptChange(event) {
     const { name, value } = event.target;
-    setForeignReceipt({ ...foreignReceipt, [name]: value });
+    if (name === "foreignamount") {
+      setForeignReceipt({ ...foreignReceipt, [name]: value, USDamount: "" });
+    } else {
+      setForeignReceipt({ ...foreignReceipt, [name]: value });
+    }
   }
 
   function handleReceiptConvert(event) {
     event.preventDefault();
     if (true) {
-      API.getConversionRatio(foreignReceipt.Type, foreignReceipt.Date)
+      API.getConversionRatio(
+        foreignReceipt.currency,
+        foreignReceipt.receiptdate
+      )
         .then((res) => {
-          console.log(res.data * Number(foreignReceipt.Amount));
-          // setConvertedAmount(res.data * Number(foreignReceipt.Amount))
-          let ConvertedAmount = (res.data * Number(foreignReceipt.Amount)).toFixed(2)
-          setForeignReceipt({...foreignReceipt, ConvertedAmount })
+          console.log(res.data * Number(foreignReceipt.foreignamount));
+          // setConvertedAmount(res.data * Number(foreignReceipt.foreignamount))
+          let USDamount = (
+            res.data * Number(foreignReceipt.foreignamount)
+          ).toFixed(2);
+          setForeignReceipt({ ...foreignReceipt, USDamount });
         })
         .catch((err) => console.log(err));
 
@@ -118,13 +128,27 @@ function Trip() {
 
   function handleReceiptSubmit(event) {
     event.preventDefault();
-    console.log(foreignReceipt, "Got to the Submit function")
+    console.log(foreignReceipt, "Got to the Submit function");
+
+    API.addReceipt(activeTrip._id, foreignReceipt).then((res) => {
+      setActiveTrip(res.data);
+      setForeignReceipt({
+        receiptname: "",
+        receiptdate: "",
+        currency: "",
+        foreignamount: "",
+        USDamount: "",
+      });
+    });
   }
+
+  // setActiveTrip({...activeTrip, receipts: [...activeTrip.receipts, foreignReceipt]})
+  
 
   return (
     <div>
       <Row>
-        <Col className="full-width" m={2}>
+        <Col className="full-width" m={3}>
           <Sidebar>
             <form>
               <div className="form-group">
@@ -166,72 +190,94 @@ function Trip() {
             )}
           </Sidebar>
         </Col>
-        <Col className="full-width" m={8}>
+        <Col className="full-width" m={6}>
           <Receipt>
             <Row>
               <TextInput
                 s={12}
-                // onChange={handleReceiptChange}
-                name="Name"
+                onChange={handleReceiptChange}
+                name="receiptname"
                 placeholder="Receipt Name (required)"
-                // value={formObject.title}
+                value={foreignReceipt.receiptname}
               />
             </Row>
             <Row>
               <TextInput
                 s={12}
                 onChange={handleReceiptChange}
-                name="Date"
+                name="receiptdate"
                 placeholder="Date YYYY-MM-DD"
-                value={foreignReceipt.Date}
+                value={foreignReceipt.receiptdate}
               />
             </Row>
             <Row>
               <TextInput
                 s={12}
                 onChange={handleReceiptChange}
-                name="Type"
+                name="currency"
                 placeholder="Currency (required)"
-                value={foreignReceipt.Type}
+                value={foreignReceipt.currency}
               />
             </Row>
             <Row>
               <TextInput
                 s={12}
                 onChange={handleReceiptChange}
-                name="Amount"
+                name="foreignamount"
                 placeholder="Foreign Amount (required)"
-                value={foreignReceipt.Amount}
+                value={foreignReceipt.foreignamount}
               />
             </Row>
             <Row>
               <TextInput
                 disabled={true}
                 s={12}
-                name="Converted"
+                name="USDamount"
                 placeholder="Hit Convert to View Converted Amount"
-                value={foreignReceipt.ConvertedAmount ? `Converted Amount : $${foreignReceipt.ConvertedAmount}` : foreignReceipt.ConvertedAmount}
+                value={
+                  foreignReceipt.USDamount
+                    ? `Converted Amount : $${foreignReceipt.USDamount}`
+                    : foreignReceipt.USDamount
+                }
               />
             </Row>
             <Row>
-              
-            {/* {foreignReceipt.convertedAmount ? <p> {foreignReceipt.convertedAmount}</p> : null} */}
+              {/* {foreignReceipt.convertedAmount ? <p> {foreignReceipt.convertedAmount}</p> : null} */}
               <button
                 disabled={
-                  !foreignReceipt.Date &&
-                  foreignReceipt.Type &&
-                  foreignReceipt.Amount
+                  !foreignReceipt.receiptname ||
+                  !foreignReceipt.receiptdate ||
+                  !foreignReceipt.currency ||
+                  !activeTrip._id
                 }
-                onClick={foreignReceipt.ConvertedAmount ? handleReceiptSubmit : handleReceiptConvert}
+                onClick={
+                  foreignReceipt.USDamount
+                    ? handleReceiptSubmit
+                    : handleReceiptConvert
+                }
               >
-                {foreignReceipt.ConvertedAmount ? "Submit Receipt" : "Convert"}
+                {foreignReceipt.USDamount ? "Submit Receipt" : "Convert"}
               </button>
-               
             </Row>
           </Receipt>
         </Col>
-        <Col className="full-width" m={2}>
-          <ShowReceipt></ShowReceipt>
+        <Col className="full-width" m={3}>
+          <ShowReceipt>
+            {activeTrip.receipts.length ? (
+              <div>
+                {activeTrip.receipts.map((receipt) => (
+                  <div key={"receiptDiv_" + receipt._id}>
+                    <p key={receipt._id}>
+                      <strong>{receipt.receiptname}: </strong>{" "}
+                      {`$${receipt.USDamount}`}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <h3>No Receipts to Display</h3>
+            )}
+          </ShowReceipt>
         </Col>
       </Row>
     </div>
