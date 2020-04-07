@@ -22,7 +22,8 @@ router.route("/").get((req, res, next) => {
 router
   .route("/login")
   .post(userController.login, passport.authenticate("local"), (req, res) => {
-    console.log("logged in", req.user);
+    console.log("log in res", res)
+    console.log("testtesttest", req.user);
     var userInfo = {
       email: req.user.email
     };

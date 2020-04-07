@@ -3,13 +3,24 @@ const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
 const userSchema = new Schema({
   firstname: { type: String, required: true, trim: true },
   lastname: { type: String, required: true, trim: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  date: { type: Date, default: Date.now }
+  email: {
+    type: String,
+    // validate: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  password: { 
+    type: String, 
+    required: true,
+    trim: true
+    // min: 8, 
+    // max: 50 
+  },
+  date: { type: Date, default: Date.now },
 });
 
 // Creating a custom method for our User model. This will check if an unhashed password entered by the user can be compared to the hashed password stored in our database
@@ -24,12 +35,12 @@ const userSchema = new Schema({
 
 // Define schema methods - mern example
 userSchema.methods = {
-  checkPassword: function(inputPassword) {
+  checkPassword: function (inputPassword) {
     return bcrypt.compareSync(inputPassword, this.password);
   },
-  hashPassword: plainTextPassword => {
+  hashPassword: (plainTextPassword) => {
     return bcrypt.hashSync(plainTextPassword, 10);
-  }
+  },
 };
 
 // Hooks are automatic methods that run during various phases of the User Model lifecycle
@@ -45,7 +56,7 @@ userSchema.methods = {
 // });
 
 // Define hooks for pre-saving - mern example
-userSchema.pre("save", function(next) {
+userSchema.pre("save", function (next) {
   if (!this.password) {
     console.log("models/user.js =======NO PASSWORD PROVIDED=======");
     next();
