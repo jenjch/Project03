@@ -51,6 +51,7 @@ function Navbar() {
               {email ? "Logout" : ""}
             </Link>
           </li>
+          {/* REMOVED LINK TO TRIP AFTER TESTING COMPLETE
           <li className="nav-item right">
             <Link
               to="/trips"
@@ -62,7 +63,7 @@ function Navbar() {
             >
               Trips
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
     </nav>
