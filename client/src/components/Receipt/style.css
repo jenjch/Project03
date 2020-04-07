@@ -14,6 +14,9 @@ input[type=text]:hover, input[type=text]:active {
 }
  */
 
+
+/* cited: https://stackoverflow.com/questions/44942347/change-the-default-color-of-materialize-css-input-fields-i-have-attached-screen */
+
 input:not([type]):focus:not([readonly]),
 input[type="text"]:not(.browser-default):focus:not([readonly]),
 input[type="password"]:not(.browser-default):focus:not([readonly]),

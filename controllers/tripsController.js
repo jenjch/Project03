@@ -27,6 +27,7 @@ module.exports =
   createReceiptWithTripID: function(req, res) {
     db.Trips
       .findByIdAndUpdate(req.params.id, {$push: {receipts: req.body} })       //this ID is the trip ID
+      .then(dbModel => db.Trips.findById(req.params.id))
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },

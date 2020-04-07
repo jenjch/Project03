@@ -5,7 +5,6 @@ import FindReceiptBtn from "../components/FindReceiptBtn";
 import { Input, FormBtn } from "../components/Form";
 import globalContext from "../utils/store.js";
 import { useHistory } from "react-router-dom";
-import { ReceiptInput } from "../components/Receipt";
 import "react-materialize";
 import {
   TextInput,
@@ -30,6 +29,18 @@ function Trip() {
   // Setting our component's initial state
   const [trips, setTrips] = useState([]);
   const [formObject, setFormObject] = useState({});
+
+  const [foreignReceipt, setForeignReceipt] = useState({
+    receiptname: "",
+    receiptdate: "",
+    currency: "",
+    foreignamount: "",
+    USDamount: "",
+  });
+
+  const [activeTrip, setActiveTrip] = useState({
+    receipts: [],
+  });
 
   // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
@@ -58,11 +69,12 @@ function Trip() {
 
   // show trip receipts
   function showTripReceipts(id) {
-    for (let i = 0; i < trips.length; i++) {
-      if (trips[i]._id === id) {
-        console.log(trips[i].receipts);
-      }
-    }
+    API.getTrips(email)
+      .then((res) => {
+        setTrips(res.data);
+        setActiveTrip(res.data.filter(({ _id }) => _id === id)[0]);
+      })
+      .catch((err) => console.log(err));
   }
 
   //updates setForm with each keystroke change
@@ -84,10 +96,59 @@ function Trip() {
     }
   }
 
+  function handleReceiptChange(event) {
+    const { name, value } = event.target;
+    if (name === "foreignamount") {
+      setForeignReceipt({ ...foreignReceipt, [name]: value, USDamount: "" });
+    } else {
+      setForeignReceipt({ ...foreignReceipt, [name]: value });
+    }
+  }
+
+  function handleReceiptConvert(event) {
+    event.preventDefault();
+    if (true) {
+      API.getConversionRatio(
+        foreignReceipt.currency,
+        foreignReceipt.receiptdate
+      )
+        .then((res) => {
+          console.log(res.data * Number(foreignReceipt.foreignamount));
+          // setConvertedAmount(res.data * Number(foreignReceipt.foreignamount))
+          let USDamount = (
+            res.data * Number(foreignReceipt.foreignamount)
+          ).toFixed(2);
+          setForeignReceipt({ ...foreignReceipt, USDamount });
+        })
+        .catch((err) => console.log(err));
+
+      // inputRef.current.value = "";
+    }
+  }
+
+  function handleReceiptSubmit(event) {
+    event.preventDefault();
+    console.log(foreignReceipt, "Got to the Submit function");
+
+    API.addReceipt(activeTrip._id, foreignReceipt).then((res) => {
+      setActiveTrip(res.data);
+      setForeignReceipt({
+        receiptname: "",
+        receiptdate: "",
+        currency: "",
+        foreignamount: "",
+        USDamount: "",
+      });
+    });
+  }
+
+  // setActiveTrip({...activeTrip, receipts: [...activeTrip.receipts, foreignReceipt]})
+  
+
   return (
     <div>
       <Row>
-        <Col className="full-width" m={2}>
+        <Col className="full-width" m={3}>
           <Sidebar>
             <form>
               <div className="form-group">
@@ -129,135 +190,94 @@ function Trip() {
             )}
           </Sidebar>
         </Col>
-        <Col className="full-width" m={8}>
+        <Col className="full-width" m={6}>
           <Receipt>
             <Row>
               <TextInput
                 s={12}
-                // onChange={handleInputChange}
-                name="Receipt Name"
+                onChange={handleReceiptChange}
+                name="receiptname"
                 placeholder="Receipt Name (required)"
-                // value={formObject.title}
-              />
-            </Row>
-            <Row>
-              <DatePicker
-                s={12}
-                id="DatePicker-5"
-                options={{
-                  autoClose: false,
-                  container: null,
-                  defaultDate: null,
-                  disableDayFn: null,
-                  disableWeekends: false,
-                  events: [],
-                  firstDay: 0,
-                  format: "yyyy-mm-dd",
-                  i18n: {
-                    cancel: "Cancel",
-                    clear: "Clear",
-                    done: "Ok",
-                    months: [
-                      "January",
-                      "February",
-                      "March",
-                      "April",
-                      "May",
-                      "June",
-                      "July",
-                      "August",
-                      "September",
-                      "October",
-                      "November",
-                      "December",
-                    ],
-                    monthsShort: [
-                      "Jan",
-                      "Feb",
-                      "Mar",
-                      "Apr",
-                      "May",
-                      "Jun",
-                      "Jul",
-                      "Aug",
-                      "Sep",
-                      "Oct",
-                      "Nov",
-                      "Dec",
-                    ],
-                    nextMonth: "›",
-                    previousMonth: "‹",
-                    weekdays: [
-                      "Sunday",
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday",
-                      "Saturday",
-                    ],
-                    weekdaysAbbrev: ["S", "M", "T", "W", "T", "F", "S"],
-                    weekdaysShort: [
-                      "Sun",
-                      "Mon",
-                      "Tue",
-                      "Wed",
-                      "Thu",
-                      "Fri",
-                      "Sat",
-                    ],
-                  },
-                  isRTL: false,
-                  maxDate: null,
-                  minDate: null,
-                  onClose: null,
-                  onDraw: null,
-                  onOpen: null,
-                  onSelect: null,
-                  parse: null,
-                  setDefaultDate: false,
-                  showClearBtn: false,
-                  showDaysInNextAndPreviousMonths: false,
-                  showMonthAfterYear: false,
-                  yearRange: 10,
-                }}
+                value={foreignReceipt.receiptname}
               />
             </Row>
             <Row>
               <TextInput
                 s={12}
-                onChange={handleInputChange}
-                name="Currency"
+                onChange={handleReceiptChange}
+                name="receiptdate"
+                placeholder="Date YYYY-MM-DD"
+                value={foreignReceipt.receiptdate}
+              />
+            </Row>
+            <Row>
+              <TextInput
+                s={12}
+                onChange={handleReceiptChange}
+                name="currency"
                 placeholder="Currency (required)"
-                value={formObject.currency}
+                value={foreignReceipt.currency}
               />
             </Row>
             <Row>
               <TextInput
                 s={12}
-                onChange={handleInputChange}
-                name="ForeignAmount"
+                onChange={handleReceiptChange}
+                name="foreignamount"
                 placeholder="Foreign Amount (required)"
-                value={formObject.foreignamount}
+                value={foreignReceipt.foreignamount}
               />
             </Row>
             <Row>
+              <TextInput
+                disabled={true}
+                s={12}
+                name="USDamount"
+                placeholder="Hit Convert to View Converted Amount"
+                value={
+                  foreignReceipt.USDamount
+                    ? `Converted Amount : $${foreignReceipt.USDamount}`
+                    : foreignReceipt.USDamount
+                }
+              />
+            </Row>
+            <Row>
+              {/* {foreignReceipt.convertedAmount ? <p> {foreignReceipt.convertedAmount}</p> : null} */}
               <button
                 disabled={
-                  !formObject.date &&
-                  formObject.currency &&
-                  formObject.foreignamount
+                  !foreignReceipt.receiptname ||
+                  !foreignReceipt.receiptdate ||
+                  !foreignReceipt.currency ||
+                  !activeTrip._id
                 }
-                onClick={handleFormSubmit}
+                onClick={
+                  foreignReceipt.USDamount
+                    ? handleReceiptSubmit
+                    : handleReceiptConvert
+                }
               >
-                Convert
+                {foreignReceipt.USDamount ? "Submit Receipt" : "Convert"}
               </button>
-              <h3>No Receipts to Display</h3>
             </Row>
           </Receipt>
         </Col>
-        <Col className="full-width" m={2}>
-          <ShowReceipt></ShowReceipt>
+        <Col className="full-width" m={3}>
+          <ShowReceipt>
+            {activeTrip.receipts.length ? (
+              <div>
+                {activeTrip.receipts.map((receipt) => (
+                  <div key={"receiptDiv_" + receipt._id}>
+                    <p key={receipt._id}>
+                      <strong>{receipt.receiptname}: </strong>{" "}
+                      {`$${receipt.USDamount}`}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <h3>No Receipts to Display</h3>
+            )}
+          </ShowReceipt>
         </Col>
       </Row>
     </div>

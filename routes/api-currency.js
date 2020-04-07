@@ -1,6 +1,6 @@
 var axios = require ("axios");
 //APIKEY is stored as a variable in Heroku; for localhost, an .env file is required and is NOT part of the git package
-var apiKey = process.env.APIKEY || require ("../.env");
+var apiKey = process.env.APIKEY;
 const router = require("express").Router();
 
 
@@ -21,7 +21,7 @@ const router = require("express").Router();
         .then(function(response) 
         {
             console.log(response.data.items);
-            res.json(response.data);
+            res.json(Object.values(response.data.quotes)[0]);
         })
             .catch(function(error) {
             res.status(500)

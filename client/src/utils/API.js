@@ -35,12 +35,12 @@ export default {
     return axios.get("/api/trips/receipt/" + id);
   },
 
-  addReceipt: function(tripData) {
-    return axios.put("/api/trips/receipt/", tripData);
+  addReceipt: function(id, receiptData) {
+    return axios.put("/api/trips/receipt/" + id, receiptData);
   },
 
-  deleteReceipt: function(id,tripData) {
-    return axios.delete("/api/trips/recipt/" + id, tripData);
+  deleteReceipt: function(id, receiptData) {
+    return axios.delete("/api/trips/recipt/" + id, receiptData);
   }
 };
 
