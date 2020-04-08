@@ -40,14 +40,18 @@ module.exports =
       .catch(err => res.status(422).json(err));
   },
 
+  deleteReceiptByID: function(req, res) {
+    console.log (req.params.id)
+    console.log (req.body.receipts._id)
+    let receiptObject = {"_id":req.body.receipts._id}
 
-  deleteReceiptByID: function(req, res) { 
+
     db.Trips
-      .findByIdAndUpdate(req.params.id,                               //this is the search for the parent trip ID
-        { $pull: { receipts: req.body } },                            //then within the parent, this pulls the subdoc
-        { new: true }                                                 //this ensures the existing document is overwritten.
+      .findByIdAndUpdate(req.params.id,                                //this is the search for the parent trip ID
+        { $pull: { receipts: receiptObject } },                        //then within the parent, this pulls the subdoc
+        { new: true }                                                   //this ensures the existing document is overwritten.
       )
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
-  },
+  }
 };

@@ -80,6 +80,19 @@ function Trip() {
       .catch((err) => console.log(err));
   }
 
+  // delete trip receipts
+  function deleteTripReceipt(id, receipts) 
+  {
+    API.deleteReceipt(id, {receipts} )
+    .then((res) => {
+      console.log(res.data)
+      setActiveTrip(res.data);
+      setShowExpenses(1)
+    })
+    .catch((err) => console.log(err));
+
+  }
+
   //updates setForm with each keystroke change
   function handleInputChange(event) {
     const { name, value } = event.target;
@@ -95,6 +108,7 @@ function Trip() {
         .then((res) => loadTrips())
         .catch((err) => console.log(err));
         setShowExpenses(0); 
+        setFormObject("")
       inputRef.current.value = "";
     }
   }
@@ -210,7 +224,7 @@ function Trip() {
                 s={12}
                 onChange={handleReceiptChange}
                 name="receiptdate"
-                placeholder="Date YYYY-MM-DD"
+                placeholder="Date YYYY-MM-DD (required)"
                 value={foreignReceipt.receiptdate}
               />
             </Row>
@@ -219,7 +233,7 @@ function Trip() {
                 s={12}
                 onChange={handleReceiptChange}
                 name="currency"
-                placeholder="Currency (required)"
+                placeholder="Currency Code (such as EUR or GPB, required)"
                 value={foreignReceipt.currency}
               />
             </Row>
@@ -228,7 +242,7 @@ function Trip() {
                 s={12}
                 onChange={handleReceiptChange}
                 name="foreignamount"
-                placeholder="Foreign Amount (required)"
+                placeholder="Foreign Amount (number only, no currency symbol, required)"
                 value={foreignReceipt.foreignamount}
               />
             </Row>
@@ -237,7 +251,7 @@ function Trip() {
                 disabled={true}
                 s={12}
                 name="USDamount"
-                placeholder="Hit Convert to View Converted Amount"
+                placeholder="Click Convert to View Converted Amount"
                 value={
                   foreignReceipt.USDamount
                     ? `Converted Amount : $${foreignReceipt.USDamount}`
@@ -274,7 +288,8 @@ function Trip() {
                   <div key={"receiptDiv_" + receipt._id}>
                     <p key={receipt._id}>
                       <strong>{receipt.receiptname}: </strong>{" "}
-                      {receipt.receiptdate} {receipt.currency} {receipt.foreignamount} {`$${receipt.USDamount}`}
+                      {receipt.receiptdate} ({receipt.currency} {receipt.foreignamount}) {`$${receipt.USDamount}`}
+                      <DeleteBtn onClick={() => deleteTripReceipt(activeTrip._id, receipt)} />
                     </p>
                   </div>
                 ))}

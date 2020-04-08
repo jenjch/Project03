@@ -18,9 +18,10 @@ router.route("/receipt/:id")
 .put(tripsController.createReceiptWithTripID)
 
 router.route("/receipt/:id")
-.delete(tripsController.deleteReceiptByID)
-
-router.route("/receipt/:id")
 .get(tripsController.findReceiptsByTripID)
+
+// Matches with "/api/trips/receiptdelete/:id"
+router.route("/receiptdelete/:id")
+.put(tripsController.deleteReceiptByID)
 
 module.exports = router;
