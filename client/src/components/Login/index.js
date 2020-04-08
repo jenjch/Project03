@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-// import { Input } from "../Form";
+import { Input } from "../Form";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import globalContext from "../../utils/store.js";
@@ -10,6 +10,7 @@ function Login(props) {
   let [password, setPassword] = useState("");
   let [credentials, setCredentials] = useState("none")
   let [checkuser, setCheckuser] = useState("none")
+  // let [checkEmailFormat, setCheckEmailFormat] = useState("none")
 
   // email used for globals is "renamed" to globalEmail since email is used above (for input)
   // use the emailHandler function from app.js
@@ -28,6 +29,7 @@ function Login(props) {
   const handleEmail = (event) => {
     setEmail(event.target.value);
     // console.log(event.target.value)
+
   };
 
   const handlePassword = (event) => {
@@ -118,7 +120,8 @@ function Login(props) {
       // url: "http://localhost:3001/send",
       // url: process.env.PORT, 
       // need to see if this needs to be changed for deployed heroku version (process.env.PORT does NOT work on local written in the .env file as process.env.PORT="http://localhost:3001/send", process.env.PORT=http://localhost:3001/send, or PORT=3001 with below code. All return in the console.log as undefined)
-      url: `http://localhost:${process.env.PORT || 3001}/send`,
+      // url: `http://localhost:${process.env.PORT || 3001}/send`,
+      url: "/send",
       data: {
         name: "Angel",
         email: "bootcamp_project@yahoo.com",
@@ -152,19 +155,21 @@ function Login(props) {
       <p className="white-text" type="text">
         Email
       </p>
-      <TextInput
-        email
-        id="loginEmail"
-        validate
+      <Input
+        // email
+        // id="loginEmail"
+        // validate
         // success="correct email format"
-        error="please type correct email format"
+        // error="please type correct email format"
         onChange={(event) => handleEmail(event)}
         value={email}
       />
+      {/* <p className="red-text" style={{display: checkEmailFormat}}>email format invalid</p> */}
       <p className="white-text">Password</p>
-      <TextInput
-        password
-        id="loginPassword"
+      <Input
+        // password
+        // id="loginPassword"
+        type="password"
         onChange={(event) => handlePassword(event)}
         value={password}
       />

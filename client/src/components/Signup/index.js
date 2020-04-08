@@ -11,22 +11,29 @@ import { TextInput } from "react-materialize";
 function Signup(props) {
   let [first, setFirst] = useState(null);
   let [last, setLast] = useState(null);
-  let [email, setEmail] = useState("");
+  let [email, setEmail] = useState(null);
   let [password, setPassword] = useState(null);
   let history = useHistory();
   let [validation, setValidation] = useState({
     first: false,
     last: false,
     // meed to add email 
-    // email: false,
+    email: false,
     password: false,
   });
 
   let [checkFirst, setCheckFirst] = useState("none");
   let [checkLast, setCheckLast] = useState("none");
   let [checkPassword, setCheckPassword] = useState("none");
-  let [checkemail, setCheckemail] = useState("none");
+  let [checkEmailExists, setCheckEmailExists] = useState("none");
   let [checkForm, setCheckForm] = useState("none");
+
+  let [checkEmailRegEx, setCheckEmailRegEx] = useState("none");
+
+  // regex for email
+  // eslint-disable-next-line
+  const validEmailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+  // const emailRegex = /^\S+@\S+\.\S+$/
 
   useEffect(() => {
     if (first === null || first.length > 0) {
@@ -41,21 +48,25 @@ function Signup(props) {
       setCheckLast("block");
       setValidation({ ...validation, last: false });
     }
-    if (password === null || password.length >= 7) {
+    if (password === null || password.length >= 8) {
       setCheckPassword("none");
       // setValidation({ ...validation, password: true });
     } else {
       setCheckPassword("block");
       setValidation({ ...validation, password: false });
     }
-  }, [first, last, password]);
+    if (email === null || validEmailRegex.test(email)) {
+      setCheckEmailRegEx("none");
+      // setValidation({ ...validation, password: true });
+    } else {
+      setCheckEmailRegEx("block");
+      setValidation({ ...validation, password: false });
+    }
+  }, [first, last, password, email]);
   
-  // regex for email
-  // const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-
   const handleFirstChange = (event) => {
     setFirst(event.target.value);
-    if (first !== null && first.length > 0) {
+    if (event.target.value !== null && event.target.value.length > 0) {
       setValidation({ ...validation, first: true });
     }
     // console.log(event.target.value)
@@ -68,7 +79,7 @@ function Signup(props) {
 
   const handleLastChange = (event) => {
     setLast(event.target.value);
-    if (last !== null && last.length > 0) {
+    if (event.target.value !== null && event.target.value.length > 0) {
       setValidation({ ...validation, last: true });
     }
     // console.log(event.target.value)
@@ -82,12 +93,16 @@ function Signup(props) {
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
     // console.log(event.target.value)
+    console.log("regEx", validEmailRegex.test(email))
+    if (email !== null && validEmailRegex.test(email)) {
+      setValidation({ ...validation, email: true });
+    }
   };
 
   const handlePasswordChange = (event) => {
     // testing - adding trim to not count towards the password length limit validation in the return form render
     setPassword(event.target.value);
-    if (password !== null && password.length >= 7) {
+    if (event.target.value !== null && event.target.value.length >= 8) {
       setValidation({ ...validation, password: true });
     }
     // console.log(event.target.value)
@@ -109,11 +124,14 @@ function Signup(props) {
       setFirst(null);
       setLast(null);
       setPassword(null);
+      setEmail(null);
       setCheckForm("block");
       setCheckFirst("none");
       setCheckLast("none")
       setCheckPassword("none");
-      setValidation({ ...validation, first: false, last:false, password:false });
+      setCheckEmailRegEx("none");
+      
+      setValidation({ ...validation, first: false, last:false, password:false, email:false });
 
       return 
     }
@@ -133,9 +151,13 @@ function Signup(props) {
         // data.data is part of the json (message sent from backend)
         if (data.data === "user already exists!") {
           // alert("email already exists!");
-          setCheckemail("block");
-          setEmail("");
-          setPassword("");
+          setCheckEmailExists("block");
+          setFirst(null);
+          setLast(null);
+          setEmail(null);
+          setPassword(null);
+          // don't need to show the invalid form message (technically is valid even if user already exists)
+          setCheckForm("none");
         } else if (data.data === "User Created!") {
           // redirected to home page (which is log in page) to log in
 
@@ -174,20 +196,23 @@ function Signup(props) {
           </div>
         </div>
         <p className="white-text">Email</p>
-        <TextInput
-          email
-          id="signupEmail"
-          validate
-          error="please type correct email format"
+        <Input
+          // email
+          // id="signupEmail"
+          // validate
+          // error="please type correct email format"
           onChange={(event) => handleEmailChange(event)}
-          value={email}
+          value={email===null ? "" : email}
         />
+        <p className="red-text" style={{ display: checkEmailRegEx }}>
+          email format invalid
+        </p>
         <p className="white-text">Password</p>
-        <TextInput
-          password
+        <Input
+          type="password"
           // validate = {false}
           // className = {(password.length > 0 && !validation.password) ? "validate invalid":"validate valid"}
-          id="loginPassword"
+          // id="loginPassword"
           onChange={(event) => handlePasswordChange(event)}
           value={password===null ? "" : password}
           // error="password must be at least 8 characters"
@@ -199,7 +224,7 @@ function Signup(props) {
         <p className="red-text" style={{ display: checkPassword }}>
           password must be at least 8 characters
         </p>
-        <p className="red-text" style={{ display: checkemail }}>
+        <p className="red-text" style={{ display: checkEmailExists }}>
           email already used
         </p>
         <p className="red-text" style={{ display: checkForm}}>
