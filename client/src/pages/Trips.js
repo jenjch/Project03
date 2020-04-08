@@ -38,10 +38,12 @@ function Trip() {
     USDamount: "",
   });
 
+  //Activates Receipt Form
   const [activeTrip, setActiveTrip] = useState({
     receipts: [],
   });
 
+  //Activates Expenses Column
   const [showExpenses, setShowExpenses] = useState(0)
 
   // redirect to homepage "/" if user is not logged in - JC
@@ -113,6 +115,7 @@ function Trip() {
     }
   }
 
+  //updates the Receipt form with each keystroke change
   function handleReceiptChange(event) {
     const { name, value } = event.target;
     if (name === "foreignamount") {
@@ -122,6 +125,7 @@ function Trip() {
     }
   }
 
+//converts foreign currency to USD amount on button submit
   function handleReceiptConvert(event) {
     event.preventDefault();
     if (true) {
@@ -130,10 +134,10 @@ function Trip() {
         foreignReceipt.receiptdate
       )
         .then((res) => {
-          console.log(res.data * Number(foreignReceipt.foreignamount));
+          console.log(Number(foreignReceipt.foreignamount / res.data));
           // setConvertedAmount(res.data * Number(foreignReceipt.foreignamount))
           let USDamount = (
-            res.data * Number(foreignReceipt.foreignamount)
+            Number(foreignReceipt.foreignamount) / res.data
           ).toFixed(2);
           setForeignReceipt({ ...foreignReceipt, USDamount });
         })
@@ -143,6 +147,7 @@ function Trip() {
     }
   }
 
+  //Adds new expense to the database, displays on Expenses column
   function handleReceiptSubmit(event) {
     event.preventDefault();
     console.log(foreignReceipt, "Got to the Submit function");
