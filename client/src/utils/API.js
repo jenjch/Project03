@@ -40,7 +40,7 @@ export default {
   },
 
   deleteReceipt: function(id, receiptData) {
-    return axios.delete("/api/trips/recipt/" + id, receiptData);
+    return axios.put("/api/trips/receiptdelete/" + id, receiptData);
   }
 };
 
