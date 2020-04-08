@@ -6,7 +6,7 @@ import "./style.css";
 function FindReceiptBtn(props) {
   return (
     <span className="findReceipt-btn" {...props} role="button" tabIndex="0">
-     Go!
+     Select
     </span>
   );
 }
