@@ -42,6 +42,8 @@ function Trip() {
     receipts: [],
   });
 
+  const [showExpenses, setShowExpenses] = useState(0)
+
   // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
   useEffect(() => {
@@ -73,6 +75,7 @@ function Trip() {
       .then((res) => {
         setTrips(res.data);
         setActiveTrip(res.data.filter(({ _id }) => _id === id)[0]);
+        setShowExpenses(1)
       })
       .catch((err) => console.log(err));
   }
@@ -91,7 +94,7 @@ function Trip() {
       API.saveTrip({ email: email, tripname: formObject.tripname })
         .then((res) => loadTrips())
         .catch((err) => console.log(err));
-
+        setShowExpenses(0); 
       inputRef.current.value = "";
     }
   }
@@ -190,6 +193,7 @@ function Trip() {
             )}
           </Sidebar>
         </Col>
+        {showExpenses? ( <div>
         <Col className="full-width" m={6}>
           <Receipt>
             <Row>
@@ -263,22 +267,26 @@ function Trip() {
         </Col>
         <Col className="full-width" m={3}>
           <ShowReceipt>
+          <h3> {activeTrip.tripname} Expenses</h3>
             {activeTrip.receipts.length ? (
               <div>
                 {activeTrip.receipts.map((receipt) => (
                   <div key={"receiptDiv_" + receipt._id}>
                     <p key={receipt._id}>
                       <strong>{receipt.receiptname}: </strong>{" "}
-                      {`$${receipt.USDamount}`}
+                      {receipt.receiptdate} {receipt.currency} {receipt.foreignamount} {`$${receipt.USDamount}`}
                     </p>
                   </div>
                 ))}
+                <div>Total ${activeTrip.receipts.reduce((first,second)=> first + second.USDamount, 0)}</div>
               </div>
+              
             ) : (
               <h3>No Receipts to Display</h3>
             )}
           </ShowReceipt>
-        </Col>
+        </Col></div>
+         ) : ( <div></div>)}
       </Row>
     </div>
   );
