@@ -3,7 +3,7 @@ import { Input } from "../Form";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import globalContext from "../../utils/store.js";
-import { TextInput } from "react-materialize";
+// import { TextInput } from "react-materialize";
 
 function Login(props) {
   let [email, setEmail] = useState("");
@@ -16,6 +16,7 @@ function Login(props) {
   // use the emailHandler function from app.js
   const { email: globalEmail, emailHandler } = useContext(globalContext);
   console.log("check globalEmail", globalEmail);
+  // used for redirect
   let history = useHistory();
 
   useEffect(() => {
@@ -25,7 +26,6 @@ function Login(props) {
     }
   });
 
-  // need to give error if email or password is incorrect (check back end)
   const handleEmail = (event) => {
     setEmail(event.target.value);
     // console.log(event.target.value)
@@ -74,78 +74,6 @@ function Login(props) {
       });
   };
 
-  function sendEmail() {
-    // event.preventDefault();
-
-    //collect the values from input
-    // var enteredName =  stateForm.enteredName;
-    // var enteredEmail =  stateForm.enteredEmail;
-    // var enteredMessage = stateForm.enteredMessage;
-
-    //make sure name and email are not empty
-    //     if (!enteredName || !enteredEmail || !enteredMessage)
-    //     {
-    //       console.log("Name, email, and message are all required.")
-    //     }
-    //     else
-    //     {
-    //       axios(
-    //       {
-    //         method: "POST",
-    //         //url:"http://localhost:3001/send",
-    //         url: process.env.PORT,
-    //         data:
-    //         {
-    //           name: enteredName,
-    //           email: enteredEmail,
-    //           message:  enteredMessage
-    //         }
-    //       });
-
-    //       setStateForm(
-    //       {
-    //         enteredName : "",
-    //         enteredEmail : "",
-    //         enteredMessage : ""
-    //       });
-
-    //       document.getElementById('input_name').value = "";
-    //       document.getElementById('input_email').value = "";
-    //       document.getElementById('input_message').value = "";
-
-    //     };
-    console.log(process.env.PORT);
-    axios({
-      method: "POST",
-      // url: "http://localhost:3001/send",
-      // url: process.env.PORT, 
-      // need to see if this needs to be changed for deployed heroku version (process.env.PORT does NOT work on local written in the .env file as process.env.PORT="http://localhost:3001/send", process.env.PORT=http://localhost:3001/send, or PORT=3001 with below code. All return in the console.log as undefined)
-      // url: `http://localhost:${process.env.PORT || 3001}/send`,
-      url: "/send",
-      data: {
-        name: "Angel",
-        email: "bootcamp_project@yahoo.com",
-        tripName: "Turkey",
-        receiptsBody: "Turkey testing message body of email",
-      },
-      // }).then((response)=>{
-      //   if (response.data.msg === 'success'){
-      //       alert("Email sent, awesome!");
-      //       this.resetForm()
-      //   }else if(response.data.msg === 'fail'){
-      //       alert("Oops, something went wrong. Try again")
-      //   }
-      // });
-    })
-      .then((response) => {
-        console.log("email sent!", response);
-        alert("email sent from button click");
-      })
-      .catch((err) => {
-        console.log("error", err);
-        alert("error sending email: " + err);
-      });
-  }
 
   return (
     <div className="input-field">
@@ -156,19 +84,12 @@ function Login(props) {
         Email
       </p>
       <Input
-        // email
-        // id="loginEmail"
-        // validate
-        // success="correct email format"
-        // error="please type correct email format"
         onChange={(event) => handleEmail(event)}
         value={email}
       />
       {/* <p className="red-text" style={{display: checkEmailFormat}}>email format invalid</p> */}
       <p className="white-text">Password</p>
       <Input
-        // password
-        // id="loginPassword"
         type="password"
         onChange={(event) => handlePassword(event)}
         value={password}
@@ -180,13 +101,6 @@ function Login(props) {
         onClick={() => handleClick()}
       >
         Log In!
-      </button>
-
-      <button
-        className="waves-effect waves-light btn blue darken-1"
-        onClick={() => sendEmail()}
-      >
-        Send Email Test!
       </button>
     </div>
   );
