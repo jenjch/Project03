@@ -51,6 +51,8 @@ function Trip() {
   //Activates Expenses Column
   const [showExpenses, setShowExpenses] = useState(0);
 
+  const [error, setError] = useState();
+
   // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
   useEffect(() => {
@@ -83,6 +85,13 @@ function Trip() {
         setTrips(res.data);
         setActiveTrip(res.data.filter(({ _id }) => _id === id)[0]);
         setShowExpenses(1);
+        setForeignReceipt({
+          receiptname: "",
+          receiptdate: "",
+          currency: "",
+          foreignamount: "",
+          USDamount: "",
+        });
       })
       .catch((err) => console.log(err));
   }
@@ -121,7 +130,7 @@ function Trip() {
   //updates the Receipt form with each keystroke change
   function handleReceiptChange(event) {
     const { name, value } = event.target;
-    if (name === "foreignamount") {
+    if (name === "foreignamount" || name === "currency") {
       setForeignReceipt({ ...foreignReceipt, [name]: value, USDamount: "" });
     } else {
       setForeignReceipt({ ...foreignReceipt, [name]: value });
@@ -131,14 +140,19 @@ function Trip() {
   //converts foreign currency to USD amount on button submit
   function handleReceiptConvert(event) {
     event.preventDefault();
+    setError("")
     if (true) {
       API.getConversionRatio(
         foreignReceipt.currency,
         foreignReceipt.receiptdate
       )
         .then((res) => {
+          console.log(res)
+          if (res.status === 202) {
+            setError(res.data.info) 
+            return
+          }
           console.log(Number(foreignReceipt.foreignamount / res.data));
-          // setConvertedAmount(res.data * Number(foreignReceipt.foreignamount))
           let USDamount = (
             Number(foreignReceipt.foreignamount) / res.data
           ).toFixed(2);
@@ -243,9 +257,10 @@ function Trip() {
                 Add Trip
               </button>
             </form>
-
+            <br></br>
             {trips.length ? (
               <div>
+                <h3>Your Trips</h3>
                 {trips.map((trip) => (
                   <div key={"tripDiv_" + trip._id}>
                     <p key={trip._id}>
@@ -317,12 +332,14 @@ function Trip() {
                   />
                 </Row>
                 <Row>
-                  {/* {foreignReceipt.convertedAmount ? <p> {foreignReceipt.convertedAmount}</p> : null} */}
+                  {error ? <p> {error}</p> : null}
                   <button
+                    className="waves-effect waves-light btn blue darken-1"
                     disabled={
                       !foreignReceipt.receiptname ||
                       !foreignReceipt.receiptdate ||
                       !foreignReceipt.currency ||
+                      !foreignReceipt.foreignamount ||
                       !activeTrip._id
                     }
                     onClick={
@@ -341,7 +358,7 @@ function Trip() {
                 <h3> {activeTrip.tripname} Expenses</h3>
                 {activeTrip.receipts.length ? (
                   <div>
-                    {activeTrip.receipts.map((receipt) => (
+                    {activeTrip.receipts.sort((a,b) => new Date(a.receiptdate)-new Date (b.receiptdate)).map((receipt) => (
                       <div key={"receiptDiv_" + receipt._id}>
                         <p key={receipt._id}>
                           <strong>{receipt.receiptname}: </strong>{" "}
@@ -360,7 +377,7 @@ function Trip() {
                       {activeTrip.receipts.reduce(
                         (first, second) => first + second.USDamount,
                         0
-                      )}
+                      ).toFixed(2)}
                     </div>
 
                     <br/>
