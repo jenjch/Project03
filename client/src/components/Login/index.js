@@ -160,6 +160,8 @@ function Login(props) {
         error="please type correct email format"
         onChange={(event) => handleEmail(event)}
         value={email}
+        className="white-text"
+        //makes input text white
       />
       <p className="white-text">Password</p>
       <TextInput
@@ -167,6 +169,8 @@ function Login(props) {
         id="loginPassword"
         onChange={(event) => handlePassword(event)}
         value={password}
+        className="white-text"
+        //makes input text white
       />
       <p className="red-text" style={{display: checkuser}}>user does not exist</p>
       <p className="red-text" style={{display: credentials}}>incorrect password</p>

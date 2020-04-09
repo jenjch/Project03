@@ -148,10 +148,10 @@ function Trip() {
   return (
     <div>
       <Row>
-        <Col className="full-width" m={3}>
+        <Col  id= "sidenav" className="full-width" m={3}>
           <Sidebar>
             <form>
-              <div className="form-group">
+              <div className="input-field">
                 <input
                   ref={inputRef}
                   className="form-control white-text"
@@ -190,10 +190,11 @@ function Trip() {
             )}
           </Sidebar>
         </Col>
-        <Col className="full-width" m={6}>
+        <Col className="full-width" m={5}>
           <Receipt>
             <Row>
               <TextInput
+                className="white-text"
                 s={12}
                 onChange={handleReceiptChange}
                 name="receiptname"
@@ -203,6 +204,7 @@ function Trip() {
             </Row>
             <Row>
               <TextInput
+                className="white-text"
                 s={12}
                 onChange={handleReceiptChange}
                 name="receiptdate"
@@ -212,6 +214,7 @@ function Trip() {
             </Row>
             <Row>
               <TextInput
+                className="white-text"
                 s={12}
                 onChange={handleReceiptChange}
                 name="currency"
@@ -221,6 +224,7 @@ function Trip() {
             </Row>
             <Row>
               <TextInput
+                className="white-text"
                 s={12}
                 onChange={handleReceiptChange}
                 name="foreignamount"
@@ -230,6 +234,7 @@ function Trip() {
             </Row>
             <Row>
               <TextInput
+                className="white-text"
                 disabled={true}
                 s={12}
                 name="USDamount"
@@ -243,7 +248,7 @@ function Trip() {
             </Row>
             <Row>
               {/* {foreignReceipt.convertedAmount ? <p> {foreignReceipt.convertedAmount}</p> : null} */}
-              <button
+              <button className="waves-effect waves-light btn blue darken-1"
                 disabled={
                   !foreignReceipt.receiptname ||
                   !foreignReceipt.receiptdate ||
@@ -261,7 +266,7 @@ function Trip() {
             </Row>
           </Receipt>
         </Col>
-        <Col className="full-width" m={3}>
+        <Col className="full-width" m={2}>
           <ShowReceipt>
             {activeTrip.receipts.length ? (
               <div>

@@ -155,7 +155,7 @@ function Signup(props) {
   return (
     <form className="signup">
       <div>
-        <h3 className="white-text">Sign Up</h3>
+        <h3 className="white-text center-align">Sign Up</h3>
         <div className="row">
           <div className="input-field col s6">
             <p className="white-text">First Name</p>
@@ -175,6 +175,8 @@ function Signup(props) {
         </div>
         <p className="white-text">Email</p>
         <TextInput
+        //this class makes the input text white
+        className="white-text"
           email
           id="signupEmail"
           validate
@@ -184,6 +186,8 @@ function Signup(props) {
         />
         <p className="white-text">Password</p>
         <TextInput
+        //this class makes the input text white
+        className="white-text"
           password
           // validate = {false}
           // className = {(password.length > 0 && !validation.password) ? "validate invalid":"validate valid"}
@@ -205,7 +209,7 @@ function Signup(props) {
         <p className="red-text" style={{ display: checkForm}}>
           form invalid
         </p>
-        <button
+        <button id="signupbtn"
           className="waves-effect waves-light btn blue darken-1"
           onClick={(event) => handleClick(event)}
         >

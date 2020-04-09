@@ -25,7 +25,7 @@ export function Receipt(props) {
     // }
 
     return (
-      <Card className="white">
+      <Card id="form1">
 
         {/* <DatePicker
                 s={12}
