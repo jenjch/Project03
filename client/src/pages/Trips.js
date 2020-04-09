@@ -238,7 +238,7 @@ function Trip() {
         <Col  id= "sidenav" className="full-width" m={3}>
           <Sidebar>
             <form>
-              <div className="input-field">
+              <div id="addTrip" className="input-field">
                 <input
                   ref={inputRef}
                   className="form-control white-text"
@@ -280,7 +280,7 @@ function Trip() {
         </Col>
         {showExpenses ? (
           <div>
-            <Col className="full-width" m={6}>
+            <Col className="full-width" m={5}>
               <Receipt>
                 <Row>
                   <TextInput

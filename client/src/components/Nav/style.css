@@ -49,3 +49,7 @@ body{
 #signupbtn{
   margin-bottom: 10px;
 }
+
+#addTrip{
+  width: 200px;
+}

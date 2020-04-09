@@ -7,7 +7,7 @@ import "./style.css";
 
 export function Receipt(props) {
   return (
-    <Card className="white">
+    <Card id="form1">
       {/* <DatePicker
                 s={12}
                 id="DatePicker-5"
