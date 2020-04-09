@@ -5,8 +5,8 @@ import "./style.css";
 // That way we don't have to define them all individually
 function FindReceiptBtn(props) {
   return (
-    <span id="go-button" className="waves-effect waves-light btn-small green accent-3" {...props} role="button" tabIndex="0">
-     Go!
+    <span className="findReceipt-btn" {...props} role="button" tabIndex="0">
+     Select
     </span>
   );
 }
