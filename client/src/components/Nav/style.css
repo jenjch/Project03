@@ -10,10 +10,6 @@ body{
 
 
 .box{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: rgba(54, 58, 70, 0.76);
   width: 400px;
   padding-left: 25px;
@@ -21,4 +17,39 @@ body{
   padding-bottom: 25px;
   box-sizing: border-box;
   border-radius: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#form1{
+  background-color: rgb(53, 55, 80);
+  box-sizing: border-box;
+  border-radius: 10px;
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#delete-btn{
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+#sidenav{
+  background-color: rgb(84, 107, 182);
+  margin-top: 8px;
+  margin-left: 5px;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+#signupbtn{
+  margin-bottom: 10px;
+}
+
+#addTrip{
+  width: 200px;
 }

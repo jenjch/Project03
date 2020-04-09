@@ -195,7 +195,7 @@ function Signup(props) {
   return (
     <form className="signup">
       <div>
-        <h3 className="white-text">Sign Up</h3>
+        <h3 className="white-text center-align">Sign Up</h3>
         <div className="row">
           <div className="input-field col s6">
             <p className="white-text">First Name</p>
@@ -253,7 +253,7 @@ function Signup(props) {
         <p className="red-text" style={{ display: checkForm }}>
           form invalid
         </p>
-        <button
+        <button id="signupbtn"
           className="waves-effect waves-light btn blue darken-1"
           onClick={(event) => handleClick(event)}
         >
