@@ -87,7 +87,11 @@ function getUserInfo(email){
   // delete trip
   function deleteTrip(id) {
     API.deleteTrip(id)
-      .then((res) => loadTrips())
+      .then((res) => {
+        loadTrips();
+        // do not display receipts after deleting current trip (need to select an active trip again)
+        setShowExpenses(0);
+      })
       .catch((err) => console.log(err));
   }
 
@@ -202,29 +206,15 @@ function getUserInfo(email){
 
     console.log(process.env.PORT);
 
-    // may use later to get user name
-    // axios({
-    //   method: "GET",
-    //   url: `/api/user/${email}`,
-    // })
-    //   .then((response) => {
-    //     console.log("getting name", response)
-
-    //     // paste the whole second axios for email send in here
-    //   })
-    //   .catch((err) => {
-    //     console.log("error", err);
-    //   });
-
     axios({
       method: "POST",
-      // url: "http://localhost:3001/send",
+      // url: "http://localhost:3001/api/trips/send",
       // url: process.env.PORT,
       // need to see if this needs to be changed for deployed heroku version (process.env.PORT does NOT work on local written in the .env file as process.env.PORT="http://localhost:3001/send", process.env.PORT=http://localhost:3001/send, or PORT=3001 with below code. All return in the console.log as undefined)
       // url: `http://localhost:${process.env.PORT || 3001}/send`,
       url: "/api/trips/send",
       data: {
-        // name: "Angel",
+        name: username,
         receiptsBody: activeTrip,
       },
     })
@@ -240,7 +230,7 @@ function getUserInfo(email){
       })
       .catch((err) => {
         console.log("error", err);
-        alert("error sending email: " + err);
+        // alert("error sending email: " + err);
         setEmailError("block");
         // set timeout of 5 seconds so message does not linger
         setTimeout(() => {
@@ -326,6 +316,7 @@ function getUserInfo(email){
                     placeholder="Currency Code (such as EUR or GBP, required)"
                     value={foreignReceipt.currency}
                   />
+                  <a className="currencyCodes" href="https://currencylayer.com/currencies" target="_blank" rel="noopener noreferrer">accepted currency codes</a>
                 </Row>
                 <Row>
                   <TextInput
@@ -409,10 +400,10 @@ function getUserInfo(email){
                     >
                       Email Receipts!
                     </button>
-                    <p className="blue-text" style={{ display: emailAlert }}>
+                    <p className="blue-text emailSent" style={{ display: emailAlert }}>
                       Email sent!
                     </p>
-                    <p className="red-text" style={{ display: emailError }}>
+                    <p className="red-text emailFailed" style={{ display: emailError }}>
                       Email failed to send!
                     </p>
                   </div>

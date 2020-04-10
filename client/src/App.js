@@ -41,16 +41,11 @@ function App() {
         console.log("testing get error", err);
       });
   }, [email]);
-  // default undefined
-  // const globals = {email: null}
-  //NOTE: JENNY ... for login submit, talk to Russell!
 
   return (
     <Router>
       {/* <globalContext.Provider value={globals}> */}
         <globalContext.Provider value={{email, emailHandler}}>
-        {/* {" "} */}
-        {/* how do I populate this with a value from log-in? */}
         <div>
           <Nav />
           <Switch>

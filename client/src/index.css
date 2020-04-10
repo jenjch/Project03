@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.currencyCodes {
+  padding-left: 10px;
+}
+
+.emailSent, .emailFailed {
+  padding-left: 15px;
+}
+
+.emailText, .formText {
+  padding-left: 12px;
+}

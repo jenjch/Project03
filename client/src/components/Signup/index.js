@@ -137,6 +137,7 @@ function Signup(props) {
       setCheckLast("none");
       setCheckPassword("none");
       setCheckEmailRegEx("none");
+      // just in case 5 seconds hasn't passed between email already used versus invalid form errors
       setCheckEmailExists("none");
 
       setCheckForm("block");
@@ -156,10 +157,11 @@ function Signup(props) {
       return;
     }
 
-    console.log(first, last, email, password, "test input");
+    // comment out pw
+    // console.log(first, last, email, password, "test input");
     console.log("entered email on signup", email);
 
-    // otherwise if form is valid, run axios post to sent form data
+    // otherwise if form is valid, run axios post to send form data
     axios({
       method: "post",
       url: "/api/user",
@@ -179,13 +181,26 @@ function Signup(props) {
           setCheckEmailExists("block");
           // set timeout of 5 seconds so message does not linger
           setTimeout(() => {
-          setCheckEmailExists("none");
+            setCheckEmailExists("none");
           }, 5000);
 
           setFirst(null);
           setLast(null);
           setEmail(null);
           setPassword(null);
+
+          // just in case 5 seconds hasn't passed between email already used versus invalid form errors
+          setCheckForm("none");
+
+          // make sure all validation fields are set to false again
+          setValidation({
+            ...validation,
+            first: false,
+            last: false,
+            password: false,
+            email: false,
+          });
+
         } else if (data.data === "User Created!") {
           // redirected to home page (which is log in page) to log in if user successfully created
 
@@ -229,41 +244,41 @@ function Signup(props) {
         </div>
         <div className="row">
           <div className="input-field col s12">
-          <p className="white-text">Email</p>
-          <Input
-          // email
-          // id="signupEmail"
-          // validate
-          // error="please type correct email format"
-          onChange={(event) => handleEmailChange(event)}
-          value={email === null ? "" : email}
-        />
-        <p className="red-text" style={{ display: checkEmailRegEx }}>
-          email format invalid
-        </p>
-        <p className="white-text">Password</p>
-        <Input
-          type="password"
-          // validate = {false}
-          // className = {(password.length > 0 && !validation.password) ? "validate invalid":"validate valid"}
-          // id="loginPassword"
-          onChange={(event) => handlePasswordChange(event)}
-          value={password === null ? "" : password}
-          // error="password must be at least 8 characters"
-        />
-        {/* testing adding validation text to password input */}
-        {/* {password.length < 8 && (
+            <p className="white-text">Email</p>
+            <Input
+              // email
+              // id="signupEmail"
+              // validate
+              // error="please type correct email format"
+              onChange={(event) => handleEmailChange(event)}
+              value={email === null ? "" : email}
+            />
+            <p className="red-text" style={{ display: checkEmailRegEx }}>
+              email format invalid
+            </p>
+            <p className="white-text">Password</p>
+            <Input
+              type="password"
+              // validate = {false}
+              // className = {(password.length > 0 && !validation.password) ? "validate invalid":"validate valid"}
+              // id="loginPassword"
+              onChange={(event) => handlePasswordChange(event)}
+              value={password === null ? "" : password}
+              // error="password must be at least 8 characters"
+            />
+            {/* testing adding validation text to password input */}
+            {/* {password.length < 8 && (
           <p className="red-text">password must be at least 8 characters</p>
         )} */}
+            <p className="red-text" style={{ display: checkPassword }}>
+              password must be at least 8 characters
+            </p>
           </div>
         </div>
-        <p className="red-text" style={{ display: checkPassword }}>
-          password must be at least 8 characters
-        </p>
-        <p className="red-text" style={{ display: checkEmailExists }}>
+        <p className="red-text emailText" style={{ display: checkEmailExists }}>
           email already used
         </p>
-        <p className="red-text" style={{ display: checkForm }}>
+        <p className="red-text formText" style={{ display: checkForm }}>
           form invalid
         </p>
         <button
