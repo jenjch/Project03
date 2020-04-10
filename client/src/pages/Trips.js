@@ -241,7 +241,7 @@ function Trip() {
               <div id="addTrip" className="input-field">
                 <input
                   ref={inputRef}
-                  className="form-control white-text"
+                  className="form-control"
                   onChange={handleInputChange}
                   name="tripname"
                   placeholder="Trip Name"
@@ -264,7 +264,7 @@ function Trip() {
                 {trips.map((trip) => (
                   <div key={"tripDiv_" + trip._id}>
                     <p key={trip._id}>
-                      <strong>{trip.tripname}</strong>
+                      {trip.tripname}
                       <DeleteBtn onClick={() => deleteTrip(trip._id)} />
                       <FindReceiptBtn
                         onClick={() => showTripReceipts(trip._id)}
@@ -280,7 +280,7 @@ function Trip() {
         </Col>
         {showExpenses ? (
           <div>
-            <Col className="full-width" m={5}>
+            <Col className="full-width" m={4}>
               <Receipt>
                 <Row>
                   <TextInput
@@ -353,15 +353,17 @@ function Trip() {
                 </Row>
               </Receipt>
             </Col>
-            <Col className="full-width" m={3}>
+            <Col id="expenses" className="full-width" m={3}>
               <ShowReceipt>
-                <h3> {activeTrip.tripname} Expenses</h3>
+                <h3> <strong>{activeTrip.tripname} Expenses </strong> </h3>
                 {activeTrip.receipts.length ? (
                   <div>
                     {activeTrip.receipts.sort((a,b) => new Date(a.receiptdate)-new Date (b.receiptdate)).map((receipt) => (
                       <div key={"receiptDiv_" + receipt._id}>
                         <p key={receipt._id}>
                           <strong>{receipt.receiptname}: </strong>{" "}
+                          </p>
+                          <p>
                           {receipt.receiptdate} ({receipt.currency}{" "}
                           {receipt.foreignamount}) {`$${receipt.USDamount}`}
                           <DeleteBtn
@@ -373,11 +375,12 @@ function Trip() {
                       </div>
                     ))}
                     <div>
-                      Total $
+                     <h3><strong> Total $
                       {activeTrip.receipts.reduce(
                         (first, second) => first + second.USDamount,
                         0
                       ).toFixed(2)}
+                      </strong> </h3>
                     </div>
 
                     <br/>

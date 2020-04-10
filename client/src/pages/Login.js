@@ -10,7 +10,7 @@ function Login() {
   
 
   return (
-    <div className="container">
+ 
       <div className="box">
         {/* LoginComponent is default, in signup component add toggleView for use on Signup component (to use default Login component after redirect to "/") */}
         {view ? <LoginComponent/> : <SignupComponent toggleView = {toggleView}/>}
@@ -19,7 +19,7 @@ function Login() {
           {view ? " Or Sign Up Here" : "Or Log In Here"}
         </button>
       </div>
-    </div>
+
   );
 }
 
