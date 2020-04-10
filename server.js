@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const routes = require("./routes");
 const app = express();
 const passport = require("./config/passport");
-const nodemailer = require("nodemailer");
+// const nodemailer = require("nodemailer");
 const cors = require("cors");
 
 // The app works fine as is for development, but in production express-session can’t handle more than one user at a time, so connect-mongo stores session info in your database.
@@ -73,93 +73,93 @@ app.listen(PORT, function () {
 //require("./routes/api-routes.js")(app);
 //db.sequelize.sync({ force: true }).then(function() {app.listen(PORT, function() {console.log("App listening on PORT " + PORT)})});
 
-//send email using nodemailer
-let transporter = nodemailer.createTransport({
-  service: "yahoo",
-  auth: {
-    user: "bootcamp_project@yahoo.com",
-    pass: process.env.yahooPW,
-  },
-  debug: true,
-  logger: true,
+// //send email using nodemailer
+// let transporter = nodemailer.createTransport({
+//   service: "yahoo",
+//   auth: {
+//     user: "bootcamp_project@yahoo.com",
+//     pass: process.env.yahooPW,
+//   },
+//   debug: true,
+//   logger: true,
 
-  //NOTE: yahoo is one of the listed providers for this npm, so the following three attributes are already baked in
-  //host: "smtp.mail.yahoo.com",
-  //port: 465,
-  //secure: true, // true for 465, false for other ports
-});
+//   //NOTE: yahoo is one of the listed providers for this npm, so the following three attributes are already baked in
+//   //host: "smtp.mail.yahoo.com",
+//   //port: 465,
+//   //secure: true, // true for 465, false for other ports
+// });
 
-// route for nodemailer
-app.post("/send", (req, res, next) => {
-  const receiptsBody = req.body.receiptsBody;
+// // route for nodemailer
+// app.post("/api/send", (req, res, next) => {
+//   const receiptsBody = req.body.receiptsBody;
   
-  console.log("receiptsBody", receiptsBody);
+//   console.log("receiptsBody", receiptsBody);
 
-  // const name = req.body.name;
-  const email = receiptsBody.email;
-  const tripName = receiptsBody.tripname;
+//   // const name = req.body.name;
+//   const email = receiptsBody.email;
+//   const tripName = receiptsBody.tripname;
 
-  // function to total all receipts (USD) in the object
-  const total = receiptsBody.receipts.reduce(
-    (first, second) => first + second.USDamount,
-    0
-  );
+//   // function to total all receipts (USD) in the object
+//   const total = receiptsBody.receipts.reduce(
+//     (first, second) => first + second.USDamount,
+//     0
+//   ).toFixed(2);
 
-  console.log(total);
+//   console.log(total);
 
-  // creating html template for email body
-  const htmlBody = `
-    <h1>${receiptsBody.tripname}</h1>
+//   // creating html template for email body
+//   const htmlBody = `
+//     <h1>${receiptsBody.tripname}</h1>
 
-    <br/>
+//     <br/>
 
-    ${receiptsBody.receipts
-      .map(
-        ({ receiptdate, receiptname, currency, foreignamount, USDamount }) => `
-            <p>${
-              receiptdate +
-              ": " +
-              receiptname +
-              " (" +
-              currency +
-              " " +
-              foreignamount +
-              ") - USD $" +
-              USDamount
-            }</p>
-        `
-      )
-      .join("")}
+//     ${receiptsBody.receipts
+//       .map(
+//         ({ receiptdate, receiptname, currency, foreignamount, USDamount }) => `
+//             <p>${
+//               receiptdate +
+//               ": " +
+//               receiptname +
+//               " (" +
+//               currency +
+//               " " +
+//               foreignamount +
+//               ") - USD $" +
+//               USDamount
+//             }</p>
+//         `
+//       )
+//       .join("")}
 
-    <br/>
+//     <br/>
 
-    <h3>Total: $${total}</h3>
+//     <h3>Total: $${total}</h3>
 
-    <br/>
+//     <br/>
 
-    <p> See more at <a href='https://warm-depths-70998.herokuapp.com'> Convert-a-Trip</a>!</p>
-  `;
+//     <p> See more at <a href='https://warm-depths-70998.herokuapp.com'> Convert-a-Trip</a>!</p>
+//   `;
 
-  // const name = req.body.name
-  // const email = req.body.email
-  // const message = req.body.message
+//   // const name = req.body.name
+//   // const email = req.body.email
+//   // const message = req.body.message
 
-  const mailOptions = {
-    from: "bootcamp_project@yahoo.com",
-    to: email,
-    subject: "Your " + tripName + " Receipts",
-    text: " (" + email + "): ",
-    html: htmlBody,
-  };
+//   const mailOptions = {
+//     from: "bootcamp_project@yahoo.com",
+//     to: email,
+//     subject: "Your " + tripName + " Receipts",
+//     text: " (" + email + "): ",
+//     html: htmlBody,
+//   };
 
-  console.log("mailOptions:");
-  console.log(mailOptions);
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log("Transporter error: " + error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-    res.end();
-  });
-});
+//   console.log("mailOptions:");
+//   console.log(mailOptions);
+//   transporter.sendMail(mailOptions, function (error, info) {
+//     if (error) {
+//       console.log("Transporter error: " + error);
+//     } else {
+//       console.log("Email sent: " + info.response);
+//     }
+//     res.end();
+//   });
+// });
