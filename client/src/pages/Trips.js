@@ -2,25 +2,16 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import API from "../utils/API";
 import DeleteBtn from "../components/DeleteBtn";
 import FindReceiptBtn from "../components/FindReceiptBtn";
-import { Input, FormBtn } from "../components/Form";
 import globalContext from "../utils/store.js";
 import { useHistory } from "react-router-dom";
 import "react-materialize";
-import {
-  TextInput,
-  Default,
-  Col,
-  Row,
-  Card,
-  DatePicker,
-} from "react-materialize";
+import { TextInput, Col, Row } from "react-materialize";
 import Sidebar from "../components/Sidebar";
 import { ShowReceipt } from "../components/ShowReceipt";
 import { Receipt } from "../components/Receipt";
 import axios from "axios";
 
 function Trip() {
-  
   // for redirect to homepage if user is not logged in
   let history = useHistory();
   // email in globals saved from log in
@@ -45,7 +36,7 @@ function Trip() {
     USDamount: "",
   });
 
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState("");
 
   //Activates Receipt Form
   const [activeTrip, setActiveTrip] = useState({
@@ -60,7 +51,7 @@ function Trip() {
   // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
   useEffect(() => {
-    getUserInfo(email)
+    getUserInfo(email);
     console.log("email from trips page", email);
     if (!email) {
       history.push("/");
@@ -70,11 +61,11 @@ function Trip() {
   }, []);
 
   // Get user information
-function getUserInfo(email){
-    API.getUser(email).then(res => {
-      console.log(res.data.firstname)
-      setUsername(res.data.firstname)
-    })
+  function getUserInfo(email) {
+    API.getUser(email).then((res) => {
+      console.log(res.data.firstname);
+      setUsername(res.data.firstname);
+    });
   }
 
   // Loads trips
@@ -153,17 +144,17 @@ function getUserInfo(email){
   //converts foreign currency to USD amount on button submit
   function handleReceiptConvert(event) {
     event.preventDefault();
-    setError("")
+    setError("");
     if (true) {
       API.getConversionRatio(
         foreignReceipt.currency,
         foreignReceipt.receiptdate
       )
         .then((res) => {
-          console.log(res)
+          console.log(res);
           if (res.status === 202) {
-            setError(res.data.info) 
-            return
+            setError(res.data.info);
+            return;
           }
           console.log(Number(foreignReceipt.foreignamount / res.data));
           let USDamount = (
@@ -249,11 +240,10 @@ function getUserInfo(email){
       });
   }
 
-
   return (
     <div>
       <Row>
-        <Col  id= "sidenav" className="full-width" m={3}>
+        <Col id="sidenav" className="full-width" m={3}>
           <Sidebar>
             <form>
               <div id="addTrip" className="input-field">
@@ -350,7 +340,7 @@ function getUserInfo(email){
                   />
                 </Row>
                 <Row>
-                {error ? <p className = "red-text"> {error}</p> : null}
+                  {error ? <p className="red-text"> {error}</p> : null}
                   <button
                     className="waves-effect waves-light btn blue darken-1"
                     disabled={
@@ -373,35 +363,49 @@ function getUserInfo(email){
             </Col>
             <Col id="expenses" className="full-width" m={3}>
               <ShowReceipt>
-                <h3> <strong>{activeTrip.tripname} Expenses </strong> </h3>
+                <h3>
+                  {" "}
+                  <strong>{activeTrip.tripname} Expenses </strong>{" "}
+                </h3>
                 {activeTrip.receipts.length ? (
                   <div>
-                    {activeTrip.receipts.sort((a,b) => new Date(a.receiptdate)-new Date (b.receiptdate)).map((receipt) => (
-                      <div key={"receiptDiv_" + receipt._id}>
-                        <p key={receipt._id}>
-                          <strong>{receipt.receiptname}: </strong>{" "}
+                    {activeTrip.receipts
+                      .sort(
+                        (a, b) =>
+                          new Date(a.receiptdate) - new Date(b.receiptdate)
+                      )
+                      .map((receipt) => (
+                        <div key={"receiptDiv_" + receipt._id}>
+                          <p key={receipt._id}>
+                            <strong>{receipt.receiptname}: </strong>{" "}
                           </p>
                           <p>
-                          {receipt.receiptdate} ({receipt.currency}{" "}
-                          {receipt.foreignamount}) {`$${receipt.USDamount}`}
-                          <DeleteBtn
-                            onClick={() =>
-                              deleteTripReceipt(activeTrip._id, receipt)
-                            }
-                          />
-                        </p>
-                      </div>
-                    ))}
+                            {receipt.receiptdate} ({receipt.currency}{" "}
+                            {receipt.foreignamount}) {`$${receipt.USDamount}`}
+                            <DeleteBtn
+                              onClick={() =>
+                                deleteTripReceipt(activeTrip._id, receipt)
+                              }
+                            />
+                          </p>
+                        </div>
+                      ))}
                     <div>
-                     <h3><strong> Total $
-                      {activeTrip.receipts.reduce(
-                        (first, second) => first + second.USDamount,
-                        0
-                      ).toFixed(2)}
-                      </strong> </h3>
+                      <h3>
+                        <strong>
+                          {" "}
+                          Total $
+                          {activeTrip.receipts
+                            .reduce(
+                              (first, second) => first + second.USDamount,
+                              0
+                            )
+                            .toFixed(2)}
+                        </strong>{" "}
+                      </h3>
                     </div>
 
-                    <br/>
+                    <br />
                     {/* button for sending email, only generates when the receipt section displays */}
                     <button
                       className="waves-effect waves-light btn blue darken-1"
