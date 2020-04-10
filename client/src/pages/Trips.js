@@ -20,6 +20,7 @@ import { Receipt } from "../components/Receipt";
 import axios from "axios";
 
 function Trip() {
+  
   // for redirect to homepage if user is not logged in
   let history = useHistory();
   // email in globals saved from log in
@@ -43,6 +44,8 @@ function Trip() {
     USDamount: "",
   });
 
+  const [username, setUsername] = useState('')
+
   //Activates Receipt Form
   const [activeTrip, setActiveTrip] = useState({
     receipts: [],
@@ -56,6 +59,7 @@ function Trip() {
   // redirect to homepage "/" if user is not logged in - JC
   // Load trips and run again any time the setTrips array changes
   useEffect(() => {
+    getUserInfo(email)
     console.log("email from trips page", email);
     if (!email) {
       history.push("/");
@@ -63,6 +67,14 @@ function Trip() {
       loadTrips();
     }
   }, []);
+
+  // Get user information
+function getUserInfo(email){
+    API.getUser(email).then(res => {
+      console.log(res.data.firstname)
+      setUsername(res.data.firstname)
+    })
+  }
 
   // Loads trips
   function loadTrips() {
@@ -260,7 +272,7 @@ function Trip() {
             <br></br>
             {trips.length ? (
               <div>
-                <h3>Your Trips</h3>
+                <h3>{username}'s Trips</h3>
                 {trips.map((trip) => (
                   <div key={"tripDiv_" + trip._id}>
                     <p key={trip._id}>
@@ -332,7 +344,7 @@ function Trip() {
                   />
                 </Row>
                 <Row>
-                  {error ? <p> {error}</p> : null}
+                {error ? <p className = "red-text"> {error}</p> : null}
                   <button
                     className="waves-effect waves-light btn blue darken-1"
                     disabled={
