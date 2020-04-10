@@ -3,8 +3,8 @@ import "./style.css";
 
 function Footer() {
   return (
-    <footer className="footer blue-grey">
-    <span>@Project 03 2020</span>
+    <footer id="footer" className="page-footer blue darken-1">
+    <span>@Copyright 2020</span>
   </footer>
   );
 }

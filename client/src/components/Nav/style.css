@@ -5,7 +5,6 @@ nav.navbar.navbar-default {
 
 body{
   background-image: url("https://images.pexels.com/photos/53621/calculator-calculation-insurance-finance-53621.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-  
 }
 
 
@@ -15,15 +14,16 @@ body{
   padding-left: 25px;
   padding-right: 25px;
   padding-bottom: 25px;
+  padding-top: 5px;
   box-sizing: border-box;
   border-radius: 10px;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 25px;
 }
 
 #form1{
-  background-color: rgb(53, 55, 80);
   box-sizing: border-box;
   border-radius: 10px;
   width: 100%;
@@ -32,16 +32,12 @@ body{
   margin-right: auto;
 }
 
-#delete-btn{
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
 #sidenav{
-  background-color: rgb(84, 107, 182);
-  margin-top: 8px;
-  margin-left: 5px;
-  color: white;
+  background-color: rgb(254, 254, 254);
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-bottom: 10px;
+  color: rgb(0, 0, 0);
   box-sizing: border-box;
   border-radius: 10px;
 }
@@ -52,4 +48,13 @@ body{
 
 #addTrip{
   width: 200px;
+}
+
+#expenses{
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 10px;
+  display: block;
+  margin-top: 10px;
+  padding-bottom: 10px;
 }
