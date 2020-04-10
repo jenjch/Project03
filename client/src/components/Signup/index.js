@@ -3,7 +3,7 @@ import { Input } from "../Form";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 // import globalContext from "../../utils/store.js";
-import { TextInput } from "react-materialize";
+// import { TextInput } from "react-materialize";
 
 // default undefined from App.js
 //  const globals = {email: null}
@@ -133,11 +133,17 @@ function Signup(props) {
       setLast(null);
       setPassword(null);
       setEmail(null);
-      setCheckForm("block");
       setCheckFirst("none");
       setCheckLast("none");
       setCheckPassword("none");
       setCheckEmailRegEx("none");
+      setCheckEmailExists("none");
+
+      setCheckForm("block");
+      // set timeout of 5 seconds so message does not linger
+      setTimeout(() => {
+        setCheckForm("none");
+      }, 5000);
 
       setValidation({
         ...validation,
@@ -171,12 +177,15 @@ function Signup(props) {
 
           // if user already exists, show the "email already used" error message div, clear all inputs
           setCheckEmailExists("block");
+          // set timeout of 5 seconds so message does not linger
+          setTimeout(() => {
+          setCheckEmailExists("none");
+          }, 5000);
+
           setFirst(null);
           setLast(null);
           setEmail(null);
           setPassword(null);
-          // don't need to show the invalid form message (technically is valid even if user already exists)
-          setCheckForm("none");
         } else if (data.data === "User Created!") {
           // redirected to home page (which is log in page) to log in if user successfully created
 
@@ -253,7 +262,8 @@ function Signup(props) {
         <p className="red-text" style={{ display: checkForm }}>
           form invalid
         </p>
-        <button id="signupbtn"
+        <button
+          id="signupbtn"
           className="waves-effect waves-light btn blue darken-1"
           onClick={(event) => handleClick(event)}
         >

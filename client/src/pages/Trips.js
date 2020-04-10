@@ -30,6 +30,7 @@ function Trip() {
 
   // for displaying message <p> tag after receipts are emailed; hidden by default
   const [emailAlert, setEmailAlert] = useState("none");
+  const [emailError, setEmailError] = useState("none");
 
   // Setting our component's initial state
   const [trips, setTrips] = useState([]);
@@ -209,7 +210,7 @@ function Trip() {
       // url: process.env.PORT,
       // need to see if this needs to be changed for deployed heroku version (process.env.PORT does NOT work on local written in the .env file as process.env.PORT="http://localhost:3001/send", process.env.PORT=http://localhost:3001/send, or PORT=3001 with below code. All return in the console.log as undefined)
       // url: `http://localhost:${process.env.PORT || 3001}/send`,
-      url: "/send",
+      url: "/api/trips/send",
       data: {
         // name: "Angel",
         receiptsBody: activeTrip,
@@ -228,6 +229,11 @@ function Trip() {
       .catch((err) => {
         console.log("error", err);
         alert("error sending email: " + err);
+        setEmailError("block");
+        // set timeout of 5 seconds so message does not linger
+        setTimeout(() => {
+          setEmailError("none");
+        }, 5000);
       });
   }
 
@@ -389,7 +395,10 @@ function Trip() {
                       Email Receipts!
                     </button>
                     <p className="blue-text" style={{ display: emailAlert }}>
-                      Email Sent!
+                      Email sent!
+                    </p>
+                    <p className="red-text" style={{ display: emailError }}>
+                      Email failed to send!
                     </p>
                   </div>
                 ) : (
