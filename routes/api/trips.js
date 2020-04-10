@@ -44,8 +44,11 @@ let transporter = nodemailer.createTransport({
 
 // route for nodemailer
 router.post("/send", (req, res, next) => {
+
+  const name = req.body.name;
+  console.log("name: ", name);
+
   const receiptsBody = req.body.receiptsBody;
-  
   console.log("receiptsBody", receiptsBody);
 
   // const name = req.body.name;
@@ -96,8 +99,8 @@ router.post("/send", (req, res, next) => {
   const mailOptions = {
     from: "bootcamp_project@yahoo.com",
     to: email,
-    subject: "Your " + tripName + " Receipts",
-    text: "(" + email + ")",
+    subject: name + "'s " + tripName + " Receipts",
+    text: name + " (" + email + ")",
     html: htmlBody,
   };
 

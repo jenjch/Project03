@@ -40,8 +40,8 @@ function Login(props) {
   // axios click event. If correct credentials, update global, and redirect to destricted "/trips" page
   const handleClick = () => {
     console.log("email sent on log in click", email);
-    // need to comment this pw part out eventually
-    console.log("password sent on log in click", password);
+    // comment out pw
+    // console.log("password sent on log in click", password);
     axios({
       method: "post",
       url: "/api/user/login",
@@ -56,8 +56,13 @@ function Login(props) {
           // alert("user doesn't exist");
           // shows error message for user does not exist (display block versus display none)
           setCheckuser("block");
+          // set timeout of 5 seconds so message does not linger
+          setTimeout(() => {
+            setCheckuser("none");
+          }, 5000);
           setEmail("");
           setPassword("");
+          // just in case 5 seconds hasn't passed between user doesn't exist versus incorrect password errors
           setCredentials("none");
         } else if (data) {
           // double check the data structure (no user)
@@ -70,7 +75,12 @@ function Login(props) {
         // alert("incorrect credentials")
         // shows error message for incorrect credentials (password)
         setCredentials("block");
+        setTimeout(() => {
+          setCredentials("none");
+        }, 5000);
         setPassword("");
+         // just in case 5 seconds hasn't passed between user doesn't exist versus incorrect password errors
+        setCheckuser("none");
       });
   };
 
