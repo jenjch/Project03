@@ -218,8 +218,10 @@ function Signup(props) {
             </p>
           </div>
         </div>
-        <p className="white-text">Email</p>
-        <Input
+        <div className="row">
+          <div className="input-field col s12">
+          <p className="white-text">Email</p>
+          <Input
           // email
           // id="signupEmail"
           // validate
@@ -244,6 +246,8 @@ function Signup(props) {
         {/* {password.length < 8 && (
           <p className="red-text">password must be at least 8 characters</p>
         )} */}
+          </div>
+        </div>
         <p className="red-text" style={{ display: checkPassword }}>
           password must be at least 8 characters
         </p>
