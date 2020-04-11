@@ -9,10 +9,10 @@ A website that is able to convert the value of foreign currency to US dollars fo
 
 With Convert-A-Trip you will be able to:
 
-Save different trips each with their own receipts.
-Save or delete receipts from each trip.
-Get the value of the currency from that day.
-Email yourself the total in US value.
+* Save different trips each with their own receipts.
+* Save or delete receipts from each trip.
+* Get the value of the currency from that day.
+* Email yourself the total in US value.
 
 
 ----
