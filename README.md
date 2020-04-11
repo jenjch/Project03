@@ -7,7 +7,15 @@
 ## Description
 A website that is able to convert the value of foreign currency to US dollars for multiple receipts on multiple trips.
 
----- 
+With Convert-A-Trip you will be able to:
+
+* Save different trips each with their own receipts.
+* Save or delete receipts from each trip.
+* Get the value of the currency from that day.
+* Email yourself the total in US value.
+
+
+----
 
 ## Technologies Used
 1. Mongo/Mongoose
@@ -33,6 +41,6 @@ I need to convert foreign receipts into U.S. Dollars for accounting purposes.
 
 ## GIF
 
-![gif of Front End](../Project03/client/public/ConvertATrip.gif)
+![gif of Front End](/client/public/ConvertATrip.gif)
 
 ----
