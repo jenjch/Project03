@@ -19,7 +19,7 @@ With Convert-A-Trip you will be able to:
 
 ## Technologies Used
 1. Mongo/Mongoose
-2. Exchange
+2. Express
 3. React
 4. Node
 5. Materialize
@@ -35,7 +35,7 @@ I need to convert foreign receipts into U.S. Dollars for accounting purposes.
 
 ## Links
 * [Heroku Deployed Application](https://warm-depths-70998.herokuapp.com/)
-* [Github Repository Page](https://github.com/jem3523/Project03)
+* [Github Repository Page](https://github.com/jenjch/Project03)
 
 ---- 
 
